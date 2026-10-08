@@ -3,6 +3,7 @@ require("dotenv").config();
 const authRoutes = require("./routes/authRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const workflowRoutes = require("./routes/workflowRoutes");
+const tenantRoutes = require("./routes/tenantRoutes");
 const app = express();
 
 app.use(express.json());
@@ -10,6 +11,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/workflows", workflowRoutes);
+app.use("/api/tenants", tenantRoutes);
 app.get("/api/health", (req, res) => {
     res.json({
         status: "OK",
