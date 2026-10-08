@@ -35,8 +35,25 @@ const login = async (req, res) => {
         });
     }
 };
+const getMe = async (req, res) => {
+    try {
+        const user = {
+            id: req.user.userId,
+            email: req.user.email,
+            name: "Rajyalaxmi",
+            role: "Developer"
+        };
 
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
+    }
+};
 module.exports = {
     signup,
-    login
+    login,
+    getMe
 };
