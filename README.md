@@ -1,10 +1,10 @@
-lowForge
+FlowForge
 
 Multi-Tenant Distributed Workflow & Saga Orchestration Engine
 
 FlowForge is an enterprise-oriented web application for building, managing, and monitoring distributed workflow pipelines. The project is being developed as a team-based MERN application with a React frontend and a Node/Express backend.
 
-At the current stage, the frontend foundation and Dashboard UI have been completed with mock data. Backend APIs are being prepared separately and will be integrated once the API contract is finalized.
+At the current stage, the frontend foundation, Dashboard UI, and Workflow Builder frontend have been completed with mock/local frontend state. Backend APIs are being prepared separately and will be integrated once the API contracts are finalized.
 
 Current Project Progress
 
@@ -32,7 +32,29 @@ Responsive Dashboard grid structure
 
 Mock data for Dashboard UI
 
-Frontend Git branch and first feature commit
+Workflow Builder frontend
+
+React Flow workflow canvas
+
+Draggable workflow node library
+
+Custom workflow nodes
+
+Node configuration panel
+
+Conditional branching with TRUE/FALSE paths
+
+Parallel and Merge flow control
+
+Workflow validation
+
+Disconnected node detection
+
+Workflow loop detection
+
+Retry policy configuration
+
+Frontend Git branch and feature commits
 
 Currently In Progress
 
@@ -42,7 +64,7 @@ Templates page by Ayush
 
 Executions page by Ayush
 
-Future Workflow Builder implementation by M1
+Backend API integration
 
 Tech Stack
 
@@ -64,7 +86,7 @@ Recharts
 
 Lucide React
 
-React Flow (@xyflow/react) for the planned workflow builder
+React Flow (@xyflow/react) for the Workflow Builder
 
 Backend / Infrastructure
 
@@ -92,6 +114,7 @@ Frontend Structure
 
 src/
 ├── assets/
+│
 ├── components/
 │ ├── dashboard/
 │ │ ├── ActiveTenants.jsx
@@ -103,10 +126,18 @@ src/
 │ │ ├── SystemHealth.jsx
 │ │ └── WorkflowStatus.jsx
 │ │
-│ └── layout/
-│ ├── Header.jsx
-│ ├── Sidebar.jsx
-│ └── appRouter.jsx
+│ ├── layout/
+│ │ ├── Header.jsx
+│ │ ├── Sidebar.jsx
+│ │ └── appRouter.jsx
+│ │
+│ └── workflow/
+│ ├── NodeConfigPanel.jsx
+│ ├── NodeLibrary.jsx
+│ ├── WorkflowCanvas.jsx
+│ ├── WorkflowNode.jsx
+│ ├── WorkflowPageHeader.jsx
+│ └── workflowValidation.js
 │
 ├── pages/
 │ ├── Alerts.jsx
@@ -144,7 +175,7 @@ Routing
 
 Routing is handled with createBrowserRouter and RouterProvider.
 
-Current routes:
+Current Routes
 
 Route
 
@@ -162,7 +193,7 @@ Dashboard
 
 Workflows
 
-🟡 Placeholder
+✅ Frontend Completed
 
 /executions
 
@@ -252,9 +283,9 @@ At this stage these values are frontend/mock state. Backend authentication, tena
 
 Dashboard
 
-The Dashboard is currently the most complete frontend page.
+The Dashboard is currently one of the most complete frontend pages.
 
-Current layout:
+Current Layout
 
 Dashboard Header
 
@@ -285,7 +316,7 @@ Dashboard description
 
 Create Workflow button UI
 
-The button is currently visual and will be connected to the Workflow Builder later.
+The button is currently visual and will be connected to workflow creation/navigation as backend integration is completed.
 
 DashboardStats.jsx
 
@@ -413,6 +444,84 @@ Status
 
 The current UI uses mock tenant data.
 
+Workflow Builder
+
+The Workflow Builder is the main frontend surface for visually creating workflow pipelines using React Flow.
+
+Current Workflow Builder Features
+
+Drag and drop nodes from the Node Library
+
+Connect workflow nodes using React Flow
+
+Select and configure individual nodes
+
+Delete nodes and connections
+
+Conditional branching with TRUE and FALSE paths
+
+Parallel execution paths
+
+Merge multiple workflow paths
+
+Workflow validation
+
+Disconnected node detection
+
+Loop/cycle detection
+
+Retry policy configuration
+
+Save action with frontend validation
+
+Test Run action with frontend validation
+
+Deploy action with frontend validation
+
+Workflow Nodes
+
+Actions
+
+Trigger
+
+HTTP Request
+
+Database
+
+Condition
+
+Transform
+
+Delay
+
+Custom Script
+
+Send Notification
+
+Flow Control
+
+Parallel
+
+Merge
+
+Workflow Builder Structure
+
+Workflows
+├── WorkflowPageHeader
+├── NodeLibrary
+├── WorkflowCanvas
+│ └── WorkflowNode
+├── NodeConfigPanel
+└── workflowValidation
+
+Current Status
+
+The Workflow Builder frontend is implemented with local frontend state.
+
+The Save, Test Run, and Deploy actions currently perform frontend validation and UI behavior. Workflow data is not yet persisted across browser refreshes.
+
+Persistent workflow storage, versioning, testing, deployment, and execution will be connected to the backend APIs provided by the backend team.
+
 State Management
 
 Redux Toolkit and React Redux have been installed and connected.
@@ -427,7 +536,7 @@ Styling
 
 Tailwind CSS is integrated through the Vite plugin.
 
-The current UI follows a consistent dashboard design system using:
+The current UI follows a consistent dashboard and application design system using:
 
 Slate-based backgrounds and borders
 
@@ -465,9 +574,10 @@ The frontend work is being developed on the dedicated member branch:
 
 feature/member1-yogesh
 
-Current completed frontend commit:
+Current completed frontend commits include:
 
 feat: complete dashboard frontend
+feat: build workflow builder frontend
 
 Team members are expected to work on their own branches and commit their actual work to those branches before the team lead merges approved work.
 
@@ -491,7 +601,9 @@ Frontend routing
 
 Redux setup
 
-Planned Workflow Builder
+Workflow Builder
+
+Workflow validation and node configuration
 
 Future API integration
 
@@ -509,6 +621,8 @@ Tenant APIs
 
 Notification API
 
+Workflow APIs
+
 Backend integration support
 
 Ayush
@@ -523,7 +637,7 @@ Executions page
 
 Backend Integration Plan
 
-The current Dashboard uses mock data so the UI can be completed independently of the backend.
+The current frontend uses mock data and local frontend state so UI development can continue independently of the backend.
 
 The frontend will later consume APIs for:
 
@@ -545,26 +659,39 @@ Available tenants and tenant switching
 
 Notifications
 
+Workflow CRUD
+
+Workflow persistence
+
+Workflow versions
+
+Workflow test runs
+
+Workflow deployment
+
+Workflow execution
+
 API response contracts will be finalized with the backend team before frontend integration.
 
 The backend must enforce authentication, authorization, and tenant isolation. The frontend should not be treated as the authority for tenant access.
 
 Next Frontend Steps
 
-Finish Templates page.
+Finish Templates page
 
-Finish Executions page.
+Finish Executions page
 
-Build the Workflow Builder using React Flow.
+Review the pages together for consistent UI/UX
 
-Review the pages together for consistent UI/UX.
+Integrate the finalized backend APIs
 
-Integrate the finalized backend APIs.
+Add loading, error, empty, and real-data states
 
-Add loading, error, empty, and real-data states.
+Add backend-connected workflow save/load
 
-Continue with the remaining platform pages.
+Connect workflow Test Run and Deploy actions to backend services
 
-Development Principle
+Continue with the remaining platform pages
+evelopment Principle
 
 The frontend is being built incrementally with readable React code, simple component responsibilities, reusable patterns where they provide real value, and backend integration added after the API contracts are finalized.
