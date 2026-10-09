@@ -4,13 +4,13 @@ import Header from "./components/layout/Header";
 
 const App = () => {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="h-screen overflow-hidden bg-slate-50">
       <Sidebar />
 
-      <div className="ml-60">
+      <div className="ml-60 h-full">
         <Header />
 
-        <main className="min-h-screen pt-20">
+        <main className="h-full overflow-auto pt-20">
           <Outlet />
         </main>
       </div>
