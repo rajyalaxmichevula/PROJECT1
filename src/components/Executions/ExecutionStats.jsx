@@ -38,7 +38,7 @@ const executionStatsData = [
 
 const ExecutionStats = () => {
     return (
-        <div className="inline-grid max-w-full grid-cols-1 overflow-x-auto rounded-lg border border-gray-200 bg-white py-1 shadow-sm sm:grid-cols-4 lg:flex"
+        <div className="inline-grid w-full grid-cols-1 overflow-x-auto rounded-lg border border-gray-200 bg-white py-1 shadow-sm md:grid-cols-3 xl:flex gap-2"
         >
             {
                 executionStatsData.map((stat) => (

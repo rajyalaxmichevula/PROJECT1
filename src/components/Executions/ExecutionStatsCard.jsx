@@ -15,7 +15,7 @@ const ExecutionStatsCard = ({
     const isLink = title === 'Workflow' || title === 'Tenant'
 
     return (
-        <div className="flex min-w-0 flex-1 basis-full flex-col justify-center border-b border-r border-slate-200 px-3 py-3 last:border-r-0 sm:basis-1/2 lg:basis-auto lg:flex-1 lg:border-b-0">
+        <div className="flex min-w-0 flex-1 basis-full flex-col justify-center border-r border-slate-200 px-3 py-3 last:border-r-0 sm:basis-1/2 lg:basis-auto lg:flex-1 lg:border-b-0">
             {/* Label */}
             <p className="mb-1 whitespace-nowrap text-[11px] font-medium leading-4 text-slate-500">
                 {title}
