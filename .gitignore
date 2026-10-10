@@ -1,2 +1,6 @@
+dist/
+.postman/
+postman/
+curl
 node_modules/
 .env

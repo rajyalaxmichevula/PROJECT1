@@ -1,9 +1,7 @@
-
-const jwt = require("jsonwebtoken");
-
 const {
     getTenants,
-    switchTenant
+    switchTenant,
+    userCanAccessTenant
 } = require("../services/tenantService");
 
 const {
@@ -13,13 +11,28 @@ const {
 const getAllTenants = async (req, res) => {
     try {
         const tenants = await getTenants();
+        const userId = req.user.userId;
 
-        res.status(200).json({
+        // Return only tenants this user is allowed to access.
+        const authorizedTenants = [];
+
+        for (const tenant of tenants) {
+            const allowed = await userCanAccessTenant(
+                userId,
+                tenant.id
+            );
+
+            if (allowed) {
+                authorizedTenants.push(tenant);
+            }
+        }
+
+        return res.status(200).json({
             success: true,
-            data: tenants
+            data: authorizedTenants
         });
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: "Internal server error"
         });
@@ -28,12 +41,13 @@ const getAllTenants = async (req, res) => {
 
 const switchTenantController = async (req, res) => {
     try {
-        const { tenantId } = req.body;
+        const { tenantId } = req.body || {};
 
-        if (!tenantId) {
+        if (!tenantId || typeof tenantId !== "string") {
             return res.status(400).json({
                 success: false,
-                message: "tenantId is required"
+                code: "TENANT_ID_REQUIRED",
+                message: "A valid tenantId is required."
             });
         }
 
@@ -42,7 +56,22 @@ const switchTenantController = async (req, res) => {
         if (!tenant) {
             return res.status(404).json({
                 success: false,
-                message: "Tenant not found"
+                code: "TENANT_NOT_FOUND",
+                message: "Tenant not found."
+            });
+        }
+
+        // Never issue a tenant token without checking membership.
+        const allowed = await userCanAccessTenant(
+            req.user.userId,
+            tenant.id
+        );
+
+        if (!allowed) {
+            return res.status(403).json({
+                success: false,
+                code: "TENANT_ACCESS_DENIED",
+                message: "You are not authorized to access this tenant."
             });
         }
 

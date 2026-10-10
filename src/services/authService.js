@@ -8,7 +8,7 @@ const generateToken = ({ userId, email, tenantId }) => {
             email,
             ...(tenantId ? { tenantId } : {})
         },
-        process.env.JWT_SECRET || "development-secret",
+        process.env.JWT_SECRET,
         {
             expiresIn: "1h"
         }
