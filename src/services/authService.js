@@ -1,4 +1,19 @@
+
 const jwt = require("jsonwebtoken");
+
+const generateToken = ({ userId, email, tenantId }) => {
+    return jwt.sign(
+        {
+            userId,
+            email,
+            ...(tenantId ? { tenantId } : {})
+        },
+        process.env.JWT_SECRET || "development-secret",
+        {
+            expiresIn: "1h"
+        }
+    );
+};
 
 const signupUser = async ({ name, email, password }) => {
     return {
@@ -13,16 +28,10 @@ const loginUser = async ({ email, password }) => {
         email
     };
 
-    const token = jwt.sign(
-        {
-            userId: user.id,
-            email: user.email
-        },
-        process.env.JWT_SECRET || "development-secret",
-        {
-            expiresIn: "1h"
-        }
-    );
+    const token = generateToken({
+        userId: user.id,
+        email: user.email
+    });
 
     return {
         user,
@@ -32,5 +41,6 @@ const loginUser = async ({ email, password }) => {
 
 module.exports = {
     signupUser,
-    loginUser
+    loginUser,
+    generateToken
 };

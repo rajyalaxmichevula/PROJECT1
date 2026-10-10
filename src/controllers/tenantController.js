@@ -1,7 +1,14 @@
+
+const jwt = require("jsonwebtoken");
+
 const {
     getTenants,
     switchTenant
 } = require("../services/tenantService");
+
+const {
+    generateToken
+} = require("../services/authService");
 
 const getAllTenants = async (req, res) => {
     try {
@@ -23,6 +30,13 @@ const switchTenantController = async (req, res) => {
     try {
         const { tenantId } = req.body;
 
+        if (!tenantId) {
+            return res.status(400).json({
+                success: false,
+                message: "tenantId is required"
+            });
+        }
+
         const tenant = await switchTenant(tenantId);
 
         if (!tenant) {
@@ -32,13 +46,20 @@ const switchTenantController = async (req, res) => {
             });
         }
 
-        res.status(200).json({
+        const token = generateToken({
+            userId: req.user.userId,
+            email: req.user.email,
+            tenantId: tenant.id
+        });
+
+        return res.status(200).json({
             success: true,
             message: "Tenant switched successfully",
-            data: tenant
+            data: tenant,
+            token
         });
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: "Internal server error"
         });

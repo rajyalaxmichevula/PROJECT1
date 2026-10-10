@@ -1,37 +1,49 @@
+
 const express = require("express");
-
-const {
-    getAllWorkflows,
-    getWorkflow,
-    createWorkflowController,
-    updateWorkflowController
-} = require("../controllers/workflowController");
-
 const authMiddleware = require("../middleware/authMiddleware");
 
 const {
-    validateCreateWorkflow,
-    validateUpdateWorkflow
+  validateCreateWorkflow,
+  validateUpdateWorkflow,
 } = require("../validators/workflowValidator");
+
+const {
+  getAllWorkflows,
+  getWorkflow,
+  createWorkflowController,
+  updateWorkflowController,
+  deleteWorkflowController,
+  validateWorkflowController,
+  getWorkflowVersionsController,
+  getWorkflowVersionController,
+  deployWorkflowController,
+  testRunWorkflowController,
+  executeWorkflowController,
+} = require("../controllers/workflowController");
 
 const router = express.Router();
 
-router.get("/", authMiddleware, getAllWorkflows);
+router.use(authMiddleware);
 
-router.get("/:id", authMiddleware, getWorkflow);
+// Validate a graph without saving it.
+router.post("/validate", validateWorkflowController);
 
-router.post(
-    "/",
-    authMiddleware,
-    validateCreateWorkflow,
-    createWorkflowController
-);
+// List and create workflows.
+router.get("/", getAllWorkflows);
+router.post("/", validateCreateWorkflow, createWorkflowController);
 
-router.put(
-    "/:id",
-    authMiddleware,
-    validateUpdateWorkflow,
-    updateWorkflowController
-);
+// Version history.
+router.get("/:id/versions", getWorkflowVersionsController);
+router.get("/:id/versions/:version", getWorkflowVersionController);
+
+// Test, deploy, and execute.
+router.post("/:id/test-runs", testRunWorkflowController);
+router.post("/:id/deploy", deployWorkflowController);
+router.post("/:id/execute", executeWorkflowController);
+
+// Read, update, and delete.
+router.get("/:id", getWorkflow);
+router.put("/:id", validateUpdateWorkflow, updateWorkflowController);
+router.delete("/:id", deleteWorkflowController);
 
 module.exports = router;
