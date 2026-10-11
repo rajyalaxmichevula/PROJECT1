@@ -1,367 +1,202 @@
 # FlowForge
 
-## Multi-Tenant Distributed Workflow & Saga Orchestration Engine
+### Multi-Tenant Distributed Workflow & Saga Orchestration Engine
 
-FlowForge is an enterprise-oriented web application for building, managing, and monitoring distributed workflow pipelines. The project is being developed as a team-based MERN application with a React frontend and a Node/Express backend.
+FlowForge is a workflow automation platform designed to help users visually build, manage, and monitor workflow pipelines through a centralized web application.
 
-At the current stage, the frontend foundation, Dashboard UI, and Workflow Builder frontend have been completed with mock/local frontend state. Backend APIs are being prepared separately and will be integrated once the API contracts are finalized.
+The project combines a React-based frontend with a Node.js and Express backend. It includes a visual Workflow Builder, dashboard, authentication interface, application settings, and backend API integration.
 
----
-
-# Current Project Progress
-
-## Frontend Completed So Far
-
-- Vite + React project setup
-- Tailwind CSS integration
-- Lucide React icons
-- React Router setup
-- Redux Toolkit store setup
-- Application layout shell
-- Sidebar navigation
-- Header/navigation controls
-- Dashboard page and Dashboard widgets
-- Responsive Dashboard grid structure
-- Mock data for Dashboard UI
-- Workflow Builder frontend
-- React Flow workflow canvas
-- Draggable workflow node library
-- Custom workflow nodes
-- Node configuration panel
-- Conditional branching with TRUE/FALSE paths
-- Parallel and Merge flow control
-- Workflow validation
-- Disconnected node detection
-- Workflow loop detection
-- Retry policy configuration
-- Frontend Git branch and feature commits
-
-## Currently In Progress
-
-- Backend/API development by M2
-- Templates page by Ayush
-- Executions page by Ayush
-- Backend API integration
+The application is being developed incrementally, with a focus on reusable components, readable code, modular architecture, and preserving a consistent user interface.
 
 ---
 
-# Tech Stack
+## Table of Contents
 
-## Frontend
+- [Project Overview](#project-overview)
+- [Current Features](#current-features)
+- [Technology Stack](#technology-stack)
+- [Application Routes](#application-routes)
+- [Workflow Builder](#workflow-builder)
+- [Settings](#settings)
+- [Backend Overview](#backend-overview)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Environment Configuration](#environment-configuration)
+- [Available Scripts](#available-scripts)
+- [Current Development Status](#current-development-status)
+- [Future Improvements](#future-improvements)
+- [Contributing](#contributing)
+
+---
+
+## Project Overview
+
+FlowForge aims to provide a centralized interface for designing and managing automated workflows.
+
+The application includes:
+
+- A public landing page.
+- Login and signup interfaces.
+- A dashboard for workflow-related information.
+- A visual workflow editor.
+- Application navigation and protected routes.
+- Dedicated settings sections.
+- A Node.js and Express backend with API routes.
+
+The project is currently under active development. Some interfaces use local state or sample data, while backend integration is being implemented incrementally.
+
+---
+
+## Current Features
+
+### Landing Page
+
+- Public landing page.
+- Product introduction and feature sections.
+- Workflow automation overview.
+- Navigation to authentication.
+- Calls to action for getting started.
+
+### Authentication
+
+- Login and signup interfaces.
+- Form input handling.
+- Password visibility toggle.
+- Form validation and error display.
+- API request integration.
+- Token storage in browser local storage.
+- Protected application routes.
+
+**Note:** The current authentication implementation is not yet a complete persistent authentication system. User persistence and full credential verification need to be implemented and verified before production use.
+
+### Dashboard
+
+- Dashboard layout and summary cards.
+- Workflow execution charts.
+- Recent execution information.
+- Workflow status visualization.
+- System health interface.
+- Tenant information interface.
+
+The Dashboard frontend has been connected to a backend API. The completeness of individual data sources depends on the corresponding backend endpoints.
+
+### Application Layout
+
+- Reusable Header component.
+- Sidebar navigation.
+- Shared application layout.
+- Nested page routing.
+- Protected application pages.
+- Separate layouts for public and authenticated pages.
+
+### Workflow Builder
+
+- Visual workflow canvas using React Flow.
+- Drag-and-drop workflow nodes.
+- Node selection and configuration.
+- Node and edge management.
+- Conditional branching.
+- Parallel workflow paths.
+- Merge nodes.
+- Workflow validation.
+- Disconnected node detection.
+- Workflow loop detection.
+- Retry policy configuration.
+
+Backend integration for workflow persistence and execution is under development.
+
+### Settings
+
+The Settings page contains seven sections:
+
+1. General
+2. Organization
+3. Security
+4. Integrations
+5. Notifications
+6. Billing
+7. Advanced
+
+The sections use reusable components and consistent styling.
+
+Current frontend interactions include profile and organization forms, security preferences, integration toggles, notification preferences, billing plan displays, and advanced application preferences.
+
+**Note:** These interfaces should not be interpreted as fully backend-persisted settings. Features such as real API key management, external service connections, billing operations, and workspace deletion require appropriate backend implementation.
+
+---
+
+## Technology Stack
+
+### Frontend
 
 - React
 - Vite
+- JavaScript
 - Tailwind CSS
 - React Router DOM
 - Redux Toolkit
 - React Redux
+- React Flow (`@xyflow/react`)
 - Recharts
 - Lucide React
-- React Flow (`@xyflow/react`) for the Workflow Builder
 
-## Backend / Infrastructure
-
-Planned project technologies include:
+### Backend
 
 - Node.js
-- Express
-- MongoDB / Mongoose
-- Redis
-- WebSockets
-- Workflow execution/state-machine services
-- Saga compensation and retry mechanisms
-- Docker and deployment tooling
+- Express.js
+- JSON Web Tokens
+- bcryptjs
+- Joi
+- CORS
+- dotenv
+- express-rate-limit
 
-Backend implementation is currently being handled separately by the backend team members.
+### Development Tools
 
----
+- Git
+- GitHub
+- npm
+- Visual Studio Code
 
-# Frontend Structure
+### Planned Infrastructure
 
-```text
-src/
-├── assets/
-│
-├── components/
-│   ├── dashboard/
-│   │   ├── ActiveTenants.jsx
-│   │   ├── DashboardPageHeader.jsx
-│   │   ├── DashboardStats.jsx
-│   │   ├── ExecutionChart.jsx
-│   │   ├── RecentExecutions.jsx
-│   │   ├── StatCard.jsx
-│   │   ├── SystemHealth.jsx
-│   │   └── WorkflowStatus.jsx
-│   │
-│   ├── layout/
-│   │   ├── Header.jsx
-│   │   ├── Sidebar.jsx
-│   │   └── appRouter.jsx
-│   │
-│   └── workflow/
-│       ├── NodeConfigPanel.jsx
-│       ├── NodeLibrary.jsx
-│       ├── WorkflowCanvas.jsx
-│       ├── WorkflowNode.jsx
-│       ├── WorkflowPageHeader.jsx
-│       └── workflowValidation.js
-│
-├── pages/
-│   ├── Alerts.jsx
-│   ├── Dashboard.jsx
-│   ├── Executions.jsx
-│   ├── Monitoring.jsx
-│   ├── Settings.jsx
-│   ├── Templates.jsx
-│   ├── Tenants.jsx
-│   ├── Workers.jsx
-│   └── Workflows.jsx
-│
-├── store/
-│   └── store.js
-│
-├── App.jsx
-├── index.css
-└── main.jsx
-```
+The broader project architecture may include persistent database storage, distributed workers, workflow execution services, Saga compensation, retry handling, real-time execution updates, and deployment infrastructure.
+
+These capabilities should be considered planned or in development unless their implementation has been completed and tested.
 
 ---
 
-# Application Shell
+## Application Routes
 
-The main application shell is implemented in `App.jsx`.
+The application uses React Router with `createBrowserRouter`.
 
-The current layout is:
+| Route         | Page             | Access    |
+| ------------- | ---------------- | --------- |
+| `/`           | Landing Page     | Public    |
+| `/auth`       | Login / Signup   | Public    |
+| `/dashboard`  | Dashboard        | Protected |
+| `/workflows`  | Workflow Builder | Protected |
+| `/executions` | Executions       | Protected |
+| `/templates`  | Templates        | Protected |
+| `/tenants`    | Tenants          | Protected |
+| `/workers`    | Workers          | Protected |
+| `/monitoring` | Monitoring       | Protected |
+| `/alerts`     | Alerts           | Protected |
+| `/settings`   | Settings         | Protected |
 
-```text
-App
-├── Sidebar
-├── Header
-└── Outlet
-    └── Current Route Page
-```
+Protected routes check for the `flowforge_token` value in browser local storage.
 
-`Outlet` is used by React Router so the Sidebar and Header remain part of the common application shell while the active page changes.
-
----
-
-# Routing
-
-Routing is handled with `createBrowserRouter` and `RouterProvider`.
-
-## Current Routes
-
-| Route         | Page       | Status                |
-| ------------- | ---------- | --------------------- |
-| `/dashboard`  | Dashboard  | ✅ Completed          |
-| `/workflows`  | Workflows  | ✅ Frontend Completed |
-| `/executions` | Executions | 🟡 In Progress        |
-| `/templates`  | Templates  | 🟡 In Progress        |
-| `/tenants`    | Tenants    | 🟡 Placeholder        |
-| `/workers`    | Workers    | 🟡 Placeholder        |
-| `/monitoring` | Monitoring | 🟡 Placeholder        |
-| `/alerts`     | Alerts     | 🟡 Placeholder        |
-| `/settings`   | Settings   | 🟡 Placeholder        |
-
-Visiting `/` redirects to `/dashboard`.
+This is a frontend navigation check, not a replacement for server-side authentication and authorization.
 
 ---
 
-# Sidebar
+## Workflow Builder
 
-The Sidebar provides route-aware navigation using React Router's `NavLink`.
+The Workflow Builder is one of the main components of FlowForge.
 
-Current navigation items:
+It provides a visual canvas for creating workflow pipelines by connecting individual nodes.
 
-- Dashboard
-- Workflows
-- Executions
-- Templates
-- Tenants
-- Workers
-- Monitoring
-- Alerts
-- Settings
-
-The active route receives the highlighted navigation state.
-
----
-
-# Header
-
-The Header currently contains the main navigation controls required by the application design:
-
-- Current Tenant selector
-- Workflow/execution search field
-- Notifications button with unread count UI
-- Profile menu
-- Profile / Settings / Logout menu items
-
-At this stage these values are frontend/mock state. Backend authentication, tenant context, and notifications will be integrated later.
-
----
-
-# Dashboard
-
-The Dashboard is currently one of the most complete frontend pages.
-
-## Current Layout
-
-```text
-Dashboard Header
-
-Dashboard Stats
-├── Total Workflows
-├── Running
-├── Completed
-└── Failed
-
-Main Dashboard Row
-├── Workflow Executions Chart
-└── Recent Executions
-
-Bottom Dashboard Row
-├── Workflows by Status
-├── System Health
-└── Active Tenants
-```
-
-## Dashboard Components
-
-### DashboardPageHeader.jsx
-
-Contains:
-
-- Dashboard title
-- Dashboard description
-- Create Workflow button UI
-
-The button is currently visual and will be connected to workflow creation/navigation as backend integration is completed.
-
-### DashboardStats.jsx
-
-Displays four summary cards:
-
-- Total Workflows
-- Running
-- Completed
-- Failed
-
-The component uses a data array and the reusable `StatCard` component.
-
-### StatCard.jsx
-
-Reusable statistic card supporting:
-
-- Title
-- Main value
-- Percentage change
-- Description
-- Dynamic Lucide icon
-- Icon background/color
-- Positive/negative trend indicator
-
-### ExecutionChart.jsx
-
-Uses Recharts to display workflow executions over time.
-
-Current chart series:
-
-- Successful
-- Running
-- Failed
-
-The UI includes a range selector for:
-
-- Last 7 Days
-- Last 30 Days
-- Last 90 Days
-
-The data is currently mock data.
-
-### RecentExecutions.jsx
-
-Displays the latest execution records with:
-
-- Execution ID
-- Workflow name
-- Status
-- Duration
-- Relative time
-
-Current statuses:
-
-- Completed
-- Running
-- Failed
-
-The data is currently mock data.
-
-### WorkflowStatus.jsx
-
-Displays workflow distribution using a Recharts donut chart.
-
-Current statuses:
-
-- Running
-- Completed
-- Failed
-- Pending
-
-The total and percentages are calculated on the frontend from the status values.
-
-### SystemHealth.jsx
-
-Displays the health of major platform services.
-
-Current mock services:
-
-- API Server
-- Database
-- Message Queue
-- Workers
-
-The widget shows service status and response/latency information.
-
-### ActiveTenants.jsx
-
-Displays active tenant information in a table.
-
-Current fields:
-
-- Name
-- Domain
-- Workflow count
-- Status
-
-The current UI uses mock tenant data.
-
----
-
-# Workflow Builder
-
-The Workflow Builder is the main frontend surface for visually creating workflow pipelines using React Flow.
-
-## Current Workflow Builder Features
-
-- Drag and drop nodes from the Node Library
-- Connect workflow nodes using React Flow
-- Select and configure individual nodes
-- Delete nodes and connections
-- Conditional branching with TRUE and FALSE paths
-- Parallel execution paths
-- Merge multiple workflow paths
-- Workflow validation
-- Disconnected node detection
-- Loop/cycle detection
-- Retry policy configuration
-- Save action with frontend validation
-- Test Run action with frontend validation
-- Deploy action with frontend validation
-
-## Workflow Nodes
-
-### Actions
+### Supported Node Types
 
 - Trigger
 - HTTP Request
@@ -371,189 +206,366 @@ The Workflow Builder is the main frontend surface for visually creating workflow
 - Delay
 - Custom Script
 - Send Notification
-
-### Flow Control
-
 - Parallel
 - Merge
 
-## Workflow Builder Structure
+### Workflow Editing
+
+Users can interact with the workflow canvas to:
+
+- Add nodes from the node library.
+- Connect nodes.
+- Select nodes for configuration.
+- Delete nodes and connections.
+- Create conditional branches.
+- Configure retry policies.
+- Validate workflow structure.
+
+### Backend Integration
+
+Workflow API routes and handlers are being developed for workflow operations.
+
+The intended functionality includes creating, retrieving, updating, deleting, validating, versioning, deploying, and testing workflows.
+
+The availability of each operation depends on its current backend implementation. Full workflow execution and persistent storage should not be assumed complete.
+
+---
+
+## Backend Overview
+
+The Express backend exposes API routes under the `/api` prefix.
+
+### Current API Route Groups
+
+| Route                | Purpose                           |
+| -------------------- | --------------------------------- |
+| `/api/health`        | Backend health check              |
+| `/api/auth`          | Authentication-related operations |
+| `/api/dashboard`     | Dashboard data                    |
+| `/api/workflows`     | Workflow operations               |
+| `/api/tenants`       | Tenant-related operations         |
+| `/api/notifications` | Notification-related operations   |
+
+Individual endpoints and their implementation status may change as backend development progresses.
+
+### API Client
+
+The frontend uses a shared API request helper located at:
+
+`src/api/client.js`
+
+The helper centralizes HTTP requests, JSON response handling, and basic error handling.
+
+The API base URL can be configured using the `VITE_API_URL` environment variable. If it is not provided, the client uses `/api`.
+
+### Backend Status
+
+Backend development and frontend integration are ongoing.
+
+The presence of a route does not necessarily mean its complete business logic, persistent storage, authorization rules, or error handling has been implemented.
+
+---
+
+## Project Structure
+
+The following is the main application structure. Additional backend routes, services, middleware, validators, and frontend components are organized into their respective directories.
 
 ```text
-Workflows
-├── WorkflowPageHeader
-├── NodeLibrary
-├── WorkflowCanvas
-│   └── WorkflowNode
-├── NodeConfigPanel
-└── workflowValidation
+PROJECT-1-Of-Zaalima/
+│
+├── src/
+│   ├── api/
+│   │   └── client.js
+│   │
+│   ├── components/
+│   │   ├── auth/
+│   │   │   └── ProtectedRoute.jsx
+│   │   │
+│   │   ├── dashboard/
+│   │   │
+│   │   ├── layout/
+│   │   │   ├── AppLayout.jsx
+│   │   │   ├── Header.jsx
+│   │   │   ├── Sidebar.jsx
+│   │   │   └── appRouter.jsx
+│   │   │
+│   │   ├── settings/
+│   │   │   ├── AdvancedSettings.jsx
+│   │   │   ├── BillingSettings.jsx
+│   │   │   ├── GeneralSettings.jsx
+│   │   │   ├── IntegrationsSettings.jsx
+│   │   │   ├── NotificationsSettings.jsx
+│   │   │   ├── OrganizationSettings.jsx
+│   │   │   └── SecuritySettings.jsx
+│   │   │
+│   │   └── workflow/
+│   │
+│   ├── middleware/
+│   │
+│   ├── pages/
+│   │   ├── Alerts.jsx
+│   │   ├── AuthPage.jsx
+│   │   ├── Dashboard.jsx
+│   │   ├── Executions.jsx
+│   │   ├── LandingPage.jsx
+│   │   ├── Monitoring.jsx
+│   │   ├── Settings.jsx
+│   │   ├── Templates.jsx
+│   │   ├── Tenants.jsx
+│   │   ├── Workers.jsx
+│   │   └── Workflows.jsx
+│   │
+│   ├── routes/
+│   │
+│   ├── services/
+│   │
+│   ├── validators/
+│   │
+│   ├── store/
+│   │
+│   ├── App.jsx
+│   ├── index.css
+│   ├── main.jsx
+│   └── server.js
+│
+├── package.json
+├── package-lock.json
+└── README.md
 ```
 
-## Current Status
-
-The Workflow Builder frontend is implemented with local frontend state.
-
-The Save, Test Run, and Deploy actions currently perform frontend validation and UI behavior. Workflow data is not yet persisted across browser refreshes.
-
-Persistent workflow storage, versioning, testing, deployment, and execution will be connected to the backend APIs provided by the backend team.
+Some directories may contain additional files as development continues.
 
 ---
 
-# State Management
+## Getting Started
 
-Redux Toolkit and React Redux have been installed and connected.
+### Prerequisites
 
-The current store is located at:
+Install the following:
 
-```text
-src/store/store.js
+- Node.js
+- npm
+- Git
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/rajyalaxmichevula/PROJECT1.git
 ```
 
-At this stage the store has been initialized with an empty reducer object because real application state will be added as backend-connected features are implemented.
+### 2. Navigate to the Project
 
----
+```bash
+cd PROJECT1
+```
 
-# Styling
+### 3. Select the Development Branch
 
-Tailwind CSS is integrated through the Vite plugin.
+To work with the current frontend changes:
 
-The current UI follows a consistent dashboard and application design system using:
+```bash
+git checkout feature/member1-yogesh
+```
 
-- Slate-based backgrounds and borders
-- Blue primary actions
-- Green success states
-- Red failure states
-- Card-based layout
-- Rounded corners
-- Light shadows
-- Responsive grid layouts
-
----
-
-# Running the Frontend Locally
-
-Install dependencies:
+### 4. Install Dependencies
 
 ```bash
 npm install
 ```
 
-Start the development server:
+### 5. Start the Frontend
 
 ```bash
-npm start
+npm run dev
 ```
 
-The Vite development server runs at:
+The Vite development server normally runs at:
 
 ```text
-http://localhost:5173/
+http://localhost:5173
 ```
+
+### 6. Start the Backend
+
+Open a second terminal in the project root and run:
+
+```bash
+npm run backend
+```
+
+The backend normally runs on port `5000`, unless configured otherwise.
+
+The health endpoint is available at:
+
+```text
+http://localhost:5000/api/health
+```
+
+Expected response:
+
+```json
+{
+  "status": "OK",
+  "message": "FlowForge backend is running"
+}
+```
+
+The frontend and backend should be started separately during local development.
 
 ---
 
-# GitHub Workflow
+## Environment Configuration
 
-The frontend work is being developed on the dedicated member branch:
+The backend uses `dotenv` to load environment variables.
+
+Create a `.env` file in the project root for the variables required by the current backend implementation.
+
+For example:
+
+```env
+PORT=5000
+```
+
+Add other variables only when they are required by the implemented services, such as authentication secrets or database configuration.
+
+Do not commit `.env` files containing secrets, passwords, tokens, or private credentials.
+
+### Frontend API URL
+
+The frontend API client supports:
+
+```env
+VITE_API_URL=/api
+```
+
+For local development with a separately running backend, use the API URL configuration and Vite proxy settings appropriate to the project's current setup.
+
+Do not assume that a proxy is configured unless it is present in `vite.config.js`.
+
+---
+
+## Available Scripts
+
+The current `package.json` defines these scripts:
+
+| Command            | Purpose                                         |
+| ------------------ | ----------------------------------------------- |
+| `npm run dev`      | Start the Vite development server               |
+| `npm start`        | Start Vite                                      |
+| `npm run frontend` | Start Vite                                      |
+| `npm run backend`  | Start the Express backend using `src/server.js` |
+| `npm run build`    | Build the frontend for production               |
+| `npm run preview`  | Preview the production frontend build           |
+
+The current test script is a placeholder and does not run an automated test suite.
+
+---
+
+## Current Development Status
+
+### Completed Frontend Work
+
+- Landing Page UI.
+- Authentication page UI.
+- Public and protected route configuration.
+- Shared application layout.
+- Sidebar and Header integration.
+- Dashboard frontend.
+- Workflow Builder frontend.
+- Settings page structure.
+- General Settings.
+- Organization Settings.
+- Security Settings.
+- Integrations Settings.
+- Notifications Settings.
+- Billing Settings.
+- Advanced Settings.
+- Reusable components for repeated UI elements.
+- Local interactions for settings toggles and preference reset.
+- Frontend refactoring for readability and maintainability.
+
+### In Progress
+
+- Workflow frontend/backend integration.
+- Workflow API behavior and persistence.
+- Backend authentication improvements.
+- Backend integration for Settings.
+- Persistent user and organization preferences.
+- Integration with real external services.
+- Further validation and testing of API operations.
+
+### Not Yet Assumed Complete
+
+- Production-ready authentication and authorization.
+- Persistent storage for all application settings.
+- Real billing and subscription management.
+- Real Slack, Discord, email, and webhook connection flows.
+- Full distributed workflow execution.
+- Production-grade Saga orchestration and compensation.
+- Complete monitoring and deployment infrastructure.
+
+---
+
+## Future Improvements
+
+- Complete Workflow Builder API integration.
+- Persist workflows and workflow versions.
+- Implement reliable workflow execution.
+- Add execution history and detailed execution status.
+- Complete backend authentication and authorization.
+- Persist user and organization preferences.
+- Add backend-connected notification settings.
+- Implement integration credentials and connection management.
+- Add comprehensive API and frontend tests.
+- Improve loading, error, and empty states.
+- Strengthen tenant isolation and backend validation.
+- Prepare deployment and operational monitoring.
+
+---
+
+## Contributing
+
+The project is developed collaboratively using Git and GitHub.
+
+### Branch Workflow
+
+Create or switch to the appropriate feature branch before making changes.
+
+Current frontend development branch:
 
 ```text
 feature/member1-yogesh
 ```
 
-Current completed frontend commits include:
+### Commit Changes
 
-```text
-feat: complete dashboard frontend
-feat: build workflow builder frontend
+```bash
+git add <files>
+git commit -m "Describe your changes"
+git push origin feature/member1-yogesh
 ```
 
-Team members are expected to work on their own branches and commit their actual work to those branches before the team lead merges approved work.
+Use meaningful commit messages and verify the staged files before committing.
+
+Do not commit generated build artifacts, local environment files, credentials, or unrelated changes.
 
 ---
 
-# Current Team Responsibilities
+## Development Principles
 
-## M1 — Yogesh
+FlowForge is being developed with the following principles:
 
-Frontend development and UI integration.
-
-Current work:
-
-- Dashboard
-- App shell
-- Header
-- Sidebar
-- Frontend routing
-- Redux setup
-- Workflow Builder
-- Workflow validation and node configuration
-- Future API integration
-
-## M2 — Backend/API
-
-Responsible for backend services and Dashboard/API integration contracts.
-
-Current work:
-
-- Dashboard APIs
-- Authentication/user data APIs
-- Tenant APIs
-- Notification API
-- Workflow APIs
-- Backend integration support
-
-## Ayush
-
-Frontend page development alongside M1.
-
-Current work:
-
-- Templates page
-- Executions page
+- Preserve the existing UI and intended functionality.
+- Keep React components readable and maintainable.
+- Extract reusable components where they reduce duplication.
+- Separate frontend responsibilities from backend business logic.
+- Validate requests on the backend.
+- Enforce authentication and authorization on protected API operations.
+- Avoid exposing credentials or sensitive information.
+- Integrate features incrementally and test them locally.
 
 ---
 
-# Backend Integration Plan
+## License
 
-The current frontend uses mock data and local frontend state so UI development can continue independently of the backend.
-
-The frontend will later consume APIs for:
-
-- Dashboard statistics
-- Execution analytics
-- Recent executions
-- Workflow status distribution
-- System health
-- Active tenants
-- Current user/profile information
-- Available tenants and tenant switching
-- Notifications
-- Workflow CRUD
-- Workflow persistence
-- Workflow versions
-- Workflow test runs
-- Workflow deployment
-- Workflow execution
-
-API response contracts will be finalized with the backend team before frontend integration.
-
-The backend must enforce authentication, authorization, and tenant isolation. The frontend should not be treated as the authority for tenant access.
-
----
-
-# Next Frontend Steps
-
-- Finish Templates page
-- Finish Executions page
-- Review the pages together for consistent UI/UX
-- Integrate the finalized backend APIs
-- Add loading, error, empty, and real-data states
-- Add backend-connected workflow save/load
-- Connect workflow Test Run and Deploy actions to backend services
-- Continue with the remaining platform pages
-
----
-
-# Development Principle
-
-The frontend is being built incrementally with readable React code, simple component responsibilities, reusable patterns where they provide real value, and backend integration added after the API contracts are finalized.
+No project-specific open-source license has been confirmed in this README. Refer to the repository's license file or project owner for usage and distribution terms.
