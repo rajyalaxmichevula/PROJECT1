@@ -105,10 +105,10 @@ const ExecutionFlow = () => {
     }
 
     return (
-        <section className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+        <section className="overflow-hidden rounded-lg  bg-white">
 
             {/* Header */}
-            <div className="px-5 pb-1 pt-4">
+            <div className="px-5  pt-4">
                 <h2 className="text-[18px] font-semibold tracking-tight text-slate-900">
                     Execution Flow
                 </h2>

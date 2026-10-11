@@ -1,6 +1,8 @@
+import CurrentDetails from "../components/Executions/CurrentDetails";
 import ExecutionFlow from "../components/Executions/ExecutionFlow";
 import ExecutionPageHeader from "../components/Executions/ExecutionPageHeader";
 import ExecutionStats from "../components/Executions/ExecutionStats";
+import ExecutionStatus from "../components/Executions/ExecutionStatus";
 
 const Executions = () => {
   return (
@@ -10,13 +12,16 @@ const Executions = () => {
 
       <ExecutionStats />
 
-      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2 ">
+      <section className="flex flex-col lg:flex-row gap-3 ">
 
-        <div className=" rounded-lg shadow-md">
+        <div className=" rounded-lg shadow-md ">
           <ExecutionFlow />
         </div>
 
-        <div className=""></div>
+        <div className=" grid grid-col-1 md:grid-cols-2 gap-2">
+          <CurrentDetails />
+          <ExecutionStatus />
+        </div>
 
       </section>
 

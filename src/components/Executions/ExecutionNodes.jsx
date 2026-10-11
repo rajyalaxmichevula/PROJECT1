@@ -31,7 +31,13 @@ const ExecutionNode = ({ node, colors }) => {
                 </h3>
 
                 <div className="mt-1 flex items-center gap-1.5 text-[12px]">
-                    {node.status === 'completed' && (
+                    {node.subtitle && (
+                        <span className="text-emerald-600">
+                            {node.subtitle}
+                        </span>
+                    )}
+
+                    {node.status === 'completed' && node.duration && (
                         <>
                             <Check
                                 size={16}
@@ -39,16 +45,12 @@ const ExecutionNode = ({ node, colors }) => {
                             />
 
                             <span className="text-emerald-600">
-                                {node.subtitle || node.duration}
+                                {node.duration}
                             </span>
-
-                            {node.subtitle && (
-                                <span className="text-emerald-600">
-                                    {node.duration}
-                                </span>
-                            )}
                         </>
                     )}
+
+                    {!node.subtitle && !node.duration && null}
 
                     {node.status === 'running' && (
                         <>
