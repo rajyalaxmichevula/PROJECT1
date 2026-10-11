@@ -1,6 +1,10 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
-import App from "../../App";
+import AppLayout from "./AppLayout";
+import ProtectedRoute from "../auth/ProtectedRoute";
+
+import LandingPage from "../../pages/LandingPage";
+import AuthPage from "../../pages/AuthPage";
 
 import Dashboard from "../../pages/Dashboard";
 import Workflows from "../../pages/Workflows";
@@ -15,49 +19,61 @@ import Settings from "../../pages/Settings";
 const appRouter = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <LandingPage />,
+  },
+  {
+    path: "/auth",
+    element: <AuthPage />,
+  },
+  {
+    element: <ProtectedRoute />,
     children: [
       {
-        index: true,
-        element: <Navigate to="/dashboard" replace />,
-      },
-      {
-        path: "dashboard",
-        element: <Dashboard />,
-      },
-      {
-        path: "workflows",
-        element: <Workflows />,
-      },
-      {
-        path: "executions",
-        element: <Executions />,
-      },
-      {
-        path: "templates",
-        element: <Templates />,
-      },
-      {
-        path: "tenants",
-        element: <Tenants />,
-      },
-      {
-        path: "workers",
-        element: <Workers />,
-      },
-      {
-        path: "monitoring",
-        element: <Monitoring />,
-      },
-      {
-        path: "alerts",
-        element: <Alerts />,
-      },
-      {
-        path: "settings",
-        element: <Settings />,
+        element: <AppLayout />,
+        children: [
+          {
+            path: "/dashboard",
+            element: <Dashboard />,
+          },
+          {
+            path: "/workflows",
+            element: <Workflows />,
+          },
+          {
+            path: "/executions",
+            element: <Executions />,
+          },
+          {
+            path: "/templates",
+            element: <Templates />,
+          },
+          {
+            path: "/tenants",
+            element: <Tenants />,
+          },
+          {
+            path: "/workers",
+            element: <Workers />,
+          },
+          {
+            path: "/monitoring",
+            element: <Monitoring />,
+          },
+          {
+            path: "/alerts",
+            element: <Alerts />,
+          },
+          {
+            path: "/settings",
+            element: <Settings />,
+          },
+        ],
       },
     ],
+  },
+  {
+    path: "*",
+    element: <Navigate to="/" replace />,
   },
 ]);
 
