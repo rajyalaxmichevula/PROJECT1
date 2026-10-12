@@ -53,7 +53,6 @@ const ExecutionStatus = () => {
 
         {/* Execution Timeline */}
         <div className="flex flex-col">
-
           {steps.map((step, index) => {
             const isCompleted = step.status === 'Completed'
             const isRunning = step.status === 'Running'
@@ -62,17 +61,17 @@ const ExecutionStatus = () => {
             return (
               <div
                 key={step.title}
-                className={`relative flex min-w-0 gap-3 px-1 py-2 ${isRunning ? 'bg-blue-50' : ''
-                  }`}
+                className={`relative flex min-w-0 gap-3 px-2 py-2 `}
               >
-                {/* Timeline Line and Status Icon */}
+                {/* Timeline */}
                 <div className="relative flex w-8 shrink-0 justify-center">
 
+                  {/* Vertical Timeline Line */}
                   {!isLast && (
                     <span
-                      className={`absolute left-1/2 top-5 bottom-4 w-px -translate-x-1/2 ${isCompleted
-                        ? 'bg-emerald-400'
-                        : 'bg-slate-200'
+                      className={`absolute left-1/2 top-8 -bottom-4 w-0.5 -translate-x-1/2 ${isCompleted
+                          ? 'bg-emerald-500'
+                          : 'bg-slate-200'
                         }`}
                     />
                   )}
@@ -80,32 +79,24 @@ const ExecutionStatus = () => {
                   {/* Status Circle */}
                   <span
                     className={`relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${isCompleted
-                      ? 'bg-emerald-500 text-white'
-                      : isRunning
-                        ? 'bg-blue-600 text-white ring-4 ring-blue-100'
-                        : 'bg-slate-300 text-white'
+                        ? 'bg-emerald-500 text-white'
+                        : isRunning
+                          ? 'bg-blue-600 text-white ring-4 ring-blue-100'
+                          : 'bg-slate-300 text-white'
                       }`}
                   >
                     {isCompleted ? (
-                      <Check
-                        size={18}
-                        strokeWidth={3}
-                      />
+                      <Check size={18} strokeWidth={3} />
                     ) : isRunning ? (
                       <span className="h-2.5 w-2.5 rounded-full bg-white" />
                     ) : (
-                      <Circle
-                        size={15}
-                        fill="currentColor"
-                        strokeWidth={2}
-                      />
+                      <Circle size={15} fill="currentColor" />
                     )}
                   </span>
                 </div>
 
-                {/* Step Information */}
+                {/* Step Details */}
                 <div className="flex min-w-0 flex-1 items-start justify-between gap-2 py-0.5">
-
                   <div className="min-w-0">
                     <p className="text-xs font-semibold text-slate-800">
                       {step.title}
@@ -113,10 +104,10 @@ const ExecutionStatus = () => {
 
                     <p
                       className={`mt-1 text-xs ${isCompleted
-                        ? 'text-emerald-600'
-                        : isRunning
-                          ? 'text-blue-600'
-                          : 'text-amber-600'
+                          ? 'text-emerald-600'
+                          : isRunning
+                            ? 'text-blue-600'
+                            : 'text-amber-600'
                         }`}
                     >
                       {step.status}
@@ -126,12 +117,10 @@ const ExecutionStatus = () => {
                   <span className="shrink-0 pt-1 text-xs text-slate-400">
                     {step.duration}
                   </span>
-
                 </div>
               </div>
             )
           })}
-
         </div>
       </div>
 
