@@ -1,4 +1,3 @@
-
 const service = require("../services/workflowService");
 const { validateGraph } = require("../validators/workflowValidator");
 
@@ -51,10 +50,7 @@ const sendValidationErrors = (res, errors) =>
 
 const getAllWorkflows = async (req, res) => {
   try {
-    const result = await service.getWorkflows(
-      getUser(req),
-      req.query
-    );
+    const result = await service.getWorkflows(getUser(req), req.query);
 
     return res.status(200).json({
       success: true,
@@ -74,11 +70,7 @@ const getWorkflow = async (req, res) => {
     );
 
     if (!workflow) {
-      return notFound(
-        res,
-        "WORKFLOW_NOT_FOUND",
-        "Workflow not found."
-      );
+      return notFound(res, "WORKFLOW_NOT_FOUND", "Workflow not found.");
     }
 
     return res.status(200).json({
@@ -99,10 +91,7 @@ const createWorkflowController = async (req, res) => {
       return sendValidationErrors(res, errors);
     }
 
-    const workflow = await service.createWorkflow(
-      req.body,
-      getUser(req)
-    );
+    const workflow = await service.createWorkflow(req.body, getUser(req));
 
     return res.status(201).json({
       success: true,
@@ -127,11 +116,7 @@ const updateWorkflowController = async (req, res) => {
       const existing = await service.getWorkflowById(id, user);
 
       if (!existing) {
-        return notFound(
-          res,
-          "WORKFLOW_NOT_FOUND",
-          "Workflow not found."
-        );
+        return notFound(res, "WORKFLOW_NOT_FOUND", "Workflow not found.");
       }
 
       const errors = validateGraph(
@@ -144,18 +129,10 @@ const updateWorkflowController = async (req, res) => {
       }
     }
 
-    const workflow = await service.updateWorkflow(
-      id,
-      req.body,
-      user
-    );
+    const workflow = await service.updateWorkflow(id, req.body, user);
 
     if (!workflow) {
-      return notFound(
-        res,
-        "WORKFLOW_NOT_FOUND",
-        "Workflow not found."
-      );
+      return notFound(res, "WORKFLOW_NOT_FOUND", "Workflow not found.");
     }
 
     return res.status(200).json({
@@ -176,11 +153,7 @@ const deleteWorkflowController = async (req, res) => {
     );
 
     if (!deleted) {
-      return notFound(
-        res,
-        "WORKFLOW_NOT_FOUND",
-        "Workflow not found."
-      );
+      return notFound(res, "WORKFLOW_NOT_FOUND", "Workflow not found.");
     }
 
     return res.status(200).json({
@@ -194,10 +167,7 @@ const deleteWorkflowController = async (req, res) => {
 
 // Validate a graph without saving it.
 const validateWorkflowController = (req, res) => {
-  const errors = validateGraph(
-    req.body?.nodes,
-    req.body?.edges
-  );
+  const errors = validateGraph(req.body?.nodes, req.body?.edges);
 
   if (errors.length > 0) {
     return sendValidationErrors(res, errors);
@@ -219,11 +189,7 @@ const getWorkflowVersionsController = async (req, res) => {
     );
 
     if (!versions) {
-      return notFound(
-        res,
-        "WORKFLOW_NOT_FOUND",
-        "Workflow not found."
-      );
+      return notFound(res, "WORKFLOW_NOT_FOUND", "Workflow not found.");
     }
 
     return res.status(200).json({
@@ -266,17 +232,10 @@ const deployWorkflowController = async (req, res) => {
   try {
     const user = getUser(req);
 
-    const workflow = await service.getWorkflowById(
-      req.params.id,
-      user
-    );
+    const workflow = await service.getWorkflowById(req.params.id, user);
 
     if (!workflow) {
-      return notFound(
-        res,
-        "WORKFLOW_NOT_FOUND",
-        "Workflow not found."
-      );
+      return notFound(res, "WORKFLOW_NOT_FOUND", "Workflow not found.");
     }
 
     const version =
@@ -308,10 +267,7 @@ const deployWorkflowController = async (req, res) => {
       );
     }
 
-    const errors = validateGraph(
-      savedVersion.nodes,
-      savedVersion.edges
-    );
+    const errors = validateGraph(savedVersion.nodes, savedVersion.edges);
 
     if (errors.length > 0) {
       return sendValidationErrors(res, errors);
@@ -344,11 +300,7 @@ const testRunWorkflowController = async (req, res) => {
     );
 
     if (!workflow) {
-      return notFound(
-        res,
-        "WORKFLOW_NOT_FOUND",
-        "Workflow not found."
-      );
+      return notFound(res, "WORKFLOW_NOT_FOUND", "Workflow not found.");
     }
 
     const errors = validateGraph(workflow.nodes, workflow.edges);
@@ -376,11 +328,7 @@ const executeWorkflowController = async (req, res) => {
     );
 
     if (!workflow) {
-      return notFound(
-        res,
-        "WORKFLOW_NOT_FOUND",
-        "Workflow not found."
-      );
+      return notFound(res, "WORKFLOW_NOT_FOUND", "Workflow not found.");
     }
 
     if (
@@ -409,8 +357,7 @@ const getExecutionController = async (req, res) => {
   return res.status(501).json({
     success: false,
     code: "EXECUTION_STATUS_NOT_INTEGRATED",
-    message:
-      "Execution status lookup must be connected to the execution service.",
+    message: "Execution status lookup must be connected to the execution service.",
   });
 };
 

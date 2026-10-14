@@ -60,11 +60,11 @@ const validateGraph = (nodes = [], edges = []) => {
     return ["Edges must be an array."];
   }
 
-  const ids = new Set();
+  const nodeIds = new Set();
   const nodeById = new Map();
   const triggers = [];
 
-  // 1. Validate nodes and node configuration.
+  // Validate nodes and their configuration.
   for (const node of nodes) {
     if (!isObject(node)) {
       errors.push("Every node must be an object.");
@@ -76,23 +76,20 @@ const validateGraph = (nodes = [], edges = []) => {
       continue;
     }
 
-    if (ids.has(node.id)) {
+    if (nodeIds.has(node.id)) {
       errors.push(`Duplicate node ID: ${node.id}`);
       continue;
     }
 
-    ids.add(node.id);
+    nodeIds.add(node.id);
     nodeById.set(node.id, node);
 
-    // React Flow renderer type must remain separate
-    // from the actual workflow node type in node.data.type.
     if (node.type !== "workflowNode") {
       errors.push(
         `Unsupported React Flow renderer type on node "${node.id}".`
       );
     }
 
-    // Validate node position.
     if (
       !isObject(node.position) ||
       !Number.isFinite(node.position.x) ||
@@ -120,14 +117,12 @@ const validateGraph = (nodes = [], edges = []) => {
       triggers.push(node);
     }
 
-    // Verify required configuration fields.
     for (const field of requiredFieldsByType[type] || []) {
       if (isEmptyValue(data[field])) {
         errors.push(`${type} node "${node.id}" requires ${field}.`);
       }
     }
 
-    // Fields that must contain strings.
     for (const field of stringFieldsByType[type] || []) {
       if (
         data[field] !== undefined &&
@@ -140,38 +135,38 @@ const validateGraph = (nodes = [], edges = []) => {
       }
     }
 
-    if (
-      data.label !== undefined &&
-      typeof data.label !== "string"
-    ) {
+    if (data.label !== undefined && typeof data.label !== "string") {
       errors.push(`Label on node "${node.id}" must be a string.`);
     }
 
-    // Validate retry settings.
     if (
       data.backoffStrategy !== undefined &&
       !["fixed", "exponential"].includes(data.backoffStrategy)
     ) {
-      errors.push(
-        `Invalid backoffStrategy on node "${node.id}".`
-      );
+      errors.push(`Invalid backoffStrategy on node "${node.id}".`);
     }
 
     if (
       data.maxAttempts !== undefined &&
       (!Number.isInteger(data.maxAttempts) || data.maxAttempts < 1)
     ) {
+      errors.push(`maxAttempts must be a positive integer on "${node.id}".`);
+    }
+
+    if (
+      data.initialDelay !== undefined &&
+      (typeof data.initialDelay !== "number" ||
+        !Number.isFinite(data.initialDelay) ||
+        data.initialDelay < 0)
+    ) {
       errors.push(
-        `maxAttempts must be a positive integer on "${node.id}".`
+        `initialDelay must be a non-negative number on "${node.id}".`
       );
     }
 
-    // Validate HTTP request URL.
     if (type === "httpRequest" && !isEmptyValue(data.url)) {
       if (typeof data.url !== "string") {
-        errors.push(
-          `HTTP Request node "${node.id}" must have a string URL.`
-        );
+        errors.push(`HTTP Request node "${node.id}" must have a string URL.`);
       } else {
         try {
           const parsedUrl = new URL(data.url);
@@ -182,50 +177,35 @@ const validateGraph = (nodes = [], edges = []) => {
             );
           }
         } catch {
-          errors.push(
-            `HTTP Request node "${node.id}" must have a valid URL.`
-          );
+          errors.push(`HTTP Request node "${node.id}" must have a valid URL.`);
         }
       }
     }
 
-    // Validate HTTP method independently of the URL.
     if (
       type === "httpRequest" &&
       !isEmptyValue(data.method) &&
       typeof data.method === "string" &&
-      ![
-        "GET",
-        "POST",
-        "PUT",
-        "PATCH",
-        "DELETE",
-        "HEAD",
-        "OPTIONS",
-      ].includes(data.method.toUpperCase())
+      !["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"].includes(
+        data.method.toUpperCase()
+      )
     ) {
       errors.push(`Invalid HTTP method on node "${node.id}".`);
     }
 
-    // Delay values must be finite and non-negative.
-    if (
-      type === "delay" &&
-      !isEmptyValue(data.delayValue) &&
-      (
-        !(
-          typeof data.delayValue === "number" ||
-          (
-            typeof data.delayValue === "string" &&
-            data.delayValue.trim() !== ""
-          )
-        ) ||
-        !Number.isFinite(Number(data.delayValue)) ||
-        Number(data.delayValue) < 0
-      )
-    ) {
-      errors.push(
-        `Delay value on node "${node.id}" must be non-negative.`
-      );
+    if (type === "delay" && !isEmptyValue(data.delayValue)) {
+      const delayValue = data.delayValue;
+      const isValidNumber =
+        (typeof delayValue === "number" ||
+          (typeof delayValue === "string" && delayValue.trim() !== "")) &&
+        Number.isFinite(Number(delayValue)) &&
+        Number(delayValue) >= 0;
+
+      if (!isValidNumber) {
+        errors.push(
+          `Delay value on node "${node.id}" must be non-negative.`
+        );
+      }
     }
   }
 
@@ -233,30 +213,27 @@ const validateGraph = (nodes = [], edges = []) => {
     errors.push("Workflow must contain at least one Trigger node.");
   }
 
-  // 2. Prepare graph information for edge validation.
-  const adjacency = new Map(
-    [...nodeById.keys()].map((id) => [id, []])
-  );
+  const adjacency = new Map();
+  const incoming = new Map();
 
-  const incoming = new Map(
-    [...nodeById.keys()].map((id) => [id, 0])
-  );
+  for (const id of nodeById.keys()) {
+    adjacency.set(id, []);
+    incoming.set(id, 0);
+  }
 
   const edgeIds = new Set();
   const connections = new Set();
 
-  // 3. Validate edges and their connections.
+  // Validate edges and their connections.
   for (const edge of edges) {
     if (!isObject(edge)) {
       errors.push("Every edge must be an object.");
       continue;
     }
 
-    // React Flow edges should have unique, non-empty IDs.
-    const edgeIdIsValid =
-      typeof edge.id === "string" && edge.id.trim() !== "";
+    const hasValidId = typeof edge.id === "string" && edge.id.trim() !== "";
 
-    if (!edgeIdIsValid) {
+    if (!hasValidId) {
       errors.push("Every edge must have a non-empty string ID.");
     } else if (edgeIds.has(edge.id)) {
       errors.push(`Duplicate edge ID: ${edge.id}`);
@@ -264,7 +241,7 @@ const validateGraph = (nodes = [], edges = []) => {
       edgeIds.add(edge.id);
     }
 
-    const edgeLabel = edgeIdIsValid ? edge.id : "unknown";
+    const edgeLabel = hasValidId ? edge.id : "unknown";
 
     if (
       typeof edge.source !== "string" ||
@@ -278,23 +255,24 @@ const validateGraph = (nodes = [], edges = []) => {
       continue;
     }
 
-    // Validate handle types while preserving the original values.
+    let hasInvalidHandle = false;
+
     for (const field of ["sourceHandle", "targetHandle"]) {
       if (
         edge[field] !== undefined &&
         edge[field] !== null &&
         typeof edge[field] !== "string"
       ) {
-        errors.push(
-          `Invalid ${field} on edge "${edgeLabel}".`
-        );
+        errors.push(`Invalid ${field} on edge "${edgeLabel}".`);
+        hasInvalidHandle = true;
       }
     }
 
-    if (
-      edge.type !== undefined &&
-      typeof edge.type !== "string"
-    ) {
+    if (hasInvalidHandle) {
+      continue;
+    }
+
+    if (edge.type !== undefined && typeof edge.type !== "string") {
       errors.push(`Invalid type on edge "${edgeLabel}".`);
     }
 
@@ -306,47 +284,20 @@ const validateGraph = (nodes = [], edges = []) => {
       errors.push(`Invalid label on edge "${edgeLabel}".`);
     }
 
-    if (
-      edge.animated !== undefined &&
-      typeof edge.animated !== "boolean"
-    ) {
+    if (edge.animated !== undefined && typeof edge.animated !== "boolean") {
       errors.push(`Invalid animated property on edge "${edgeLabel}".`);
     }
 
-    if (
-      edge.sourceHandle !== undefined &&
-      edge.sourceHandle !== null &&
-      typeof edge.sourceHandle !== "string"
-    ) {
-      continue;
-    }
-
-    if (
-      edge.targetHandle !== undefined &&
-      edge.targetHandle !== null &&
-      typeof edge.targetHandle !== "string"
-    ) {
-      continue;
-    }
-
-    if (
-      !nodeById.has(edge.source) ||
-      !nodeById.has(edge.target)
-    ) {
-      errors.push(
-        `Edge "${edgeLabel}" references a missing node.`
-      );
+    if (!nodeById.has(edge.source) || !nodeById.has(edge.target)) {
+      errors.push(`Edge "${edgeLabel}" references a missing node.`);
       continue;
     }
 
     if (edge.source === edge.target) {
-      errors.push(
-        `Edge "${edgeLabel}" cannot connect a node to itself.`
-      );
+      errors.push(`Edge "${edgeLabel}" cannot connect a node to itself.`);
       continue;
     }
 
-    // Detect duplicate connections even when their IDs differ.
     const connectionKey = JSON.stringify([
       edge.source,
       edge.target,
@@ -362,20 +313,17 @@ const validateGraph = (nodes = [], edges = []) => {
     }
 
     connections.add(connectionKey);
-
     adjacency.get(edge.source).push(edge.target);
-    incoming.set(
-      edge.target,
-      incoming.get(edge.target) + 1
-    );
+    incoming.set(edge.target, incoming.get(edge.target) + 1);
   }
 
-  // 4. Check reachability from trigger nodes.
+  // Check that every node is reachable from a trigger.
   const reachable = new Set();
   const queue = triggers.map((node) => node.id);
+  let queueIndex = 0;
 
-  while (queue.length > 0) {
-    const id = queue.shift();
+  while (queueIndex < queue.length) {
+    const id = queue[queueIndex++];
 
     if (reachable.has(id) || !nodeById.has(id)) {
       continue;
@@ -390,16 +338,13 @@ const validateGraph = (nodes = [], edges = []) => {
 
   for (const node of nodeById.values()) {
     if (!reachable.has(node.id)) {
-      errors.push(
-        `Node "${node.id}" is not reachable from a Trigger.`
-      );
+      errors.push(`Node "${node.id}" is not reachable from a Trigger.`);
     }
   }
 
-  // 5. Detect cycles in the directed graph.
+  // Detect cycles in the directed graph.
   const visiting = new Set();
   const visited = new Set();
-  let hasCycle = false;
 
   const visit = (id) => {
     if (visiting.has(id)) {
@@ -420,9 +365,10 @@ const validateGraph = (nodes = [], edges = []) => {
 
     visiting.delete(id);
     visited.add(id);
-
     return false;
   };
+
+  let hasCycle = false;
 
   for (const id of nodeById.keys()) {
     if (visit(id)) {
@@ -435,12 +381,9 @@ const validateGraph = (nodes = [], edges = []) => {
     errors.push("Workflow graph must not contain cycles.");
   }
 
-  // 6. Merge nodes must have at least two incoming connections.
+  // Merge nodes require at least two incoming connections.
   for (const node of nodeById.values()) {
-    if (
-      node.data?.type === "merge" &&
-      incoming.get(node.id) < 2
-    ) {
+    if (node.data?.type === "merge" && incoming.get(node.id) < 2) {
       errors.push(
         `Merge node "${node.id}" must have at least two incoming edges.`
       );
@@ -465,7 +408,9 @@ const updateWorkflowSchema = Joi.object({
   nodes: Joi.array().items(Joi.object()),
   edges: Joi.array().items(Joi.object()),
   expectedVersion: Joi.number().integer().min(1),
-}).min(1).unknown(false);
+})
+  .min(1)
+  .unknown(false);
 
 const validateCreateWorkflow = (req, res, next) => {
   const { error, value } = createWorkflowSchema.validate(req.body, {

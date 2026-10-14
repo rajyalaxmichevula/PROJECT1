@@ -4,3 +4,6 @@ postman/
 curl
 node_modules/
 .env
+dist/
+.postman/
+postman/

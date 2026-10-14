@@ -1,11 +1,7 @@
-
 const { randomUUID } = require("crypto");
-
-const workflows = new Map();
-const workflowVersions = new Map();
+const workflowRepository = require("../repositories/workflowRepository");
 
 // Resolve the authenticated user's scope.
-// Prefer a trusted tenant ID supplied by authentication middleware.
 const getScope = (user) => {
   const scope = user?.tenantId || user?.userId;
 
@@ -19,10 +15,8 @@ const getScope = (user) => {
   return scope;
 };
 
-const belongsToScope = (workflow, scope) =>
-  workflow.scope === scope;
+const belongsToScope = (workflow, scope) => workflow.scope === scope;
 
-// Clone data before returning it or saving version snapshots.
 const clone = (value) => structuredClone(value);
 
 const snapshot = (workflow) => ({
@@ -39,21 +33,18 @@ const snapshot = (workflow) => ({
 });
 
 const saveVersion = (workflow) => {
-  if (!workflowVersions.has(workflow.id)) {
-    workflowVersions.set(workflow.id, new Map());
-  }
-
-  workflowVersions.get(workflow.id).set(
+  workflowRepository.saveVersion(
+    workflow.id,
     workflow.currentVersion,
     snapshot(workflow)
   );
 };
 
-// List workflows with optional search, status filtering and pagination.
+// List workflows with optional search, status filtering, and pagination.
 const getWorkflows = async (user, filters = {}) => {
   const scope = getScope(user);
 
-  let result = [...workflows.values()].filter(
+  let result = workflowRepository.findAll().filter(
     (workflow) =>
       belongsToScope(workflow, scope) && !workflow.archived
   );
@@ -104,10 +95,10 @@ const getWorkflows = async (user, filters = {}) => {
   };
 };
 
-// Retrieve one workflow if it belongs to the authenticated scope.
+// Retrieve a workflow if it belongs to the authenticated scope.
 const getWorkflowById = async (id, user) => {
   const scope = getScope(user);
-  const workflow = workflows.get(id);
+  const workflow = workflowRepository.findById(id);
 
   if (
     !workflow ||
@@ -142,16 +133,16 @@ const createWorkflow = async (input, user) => {
     archived: false,
   };
 
-  workflows.set(workflow.id, workflow);
-  saveVersion(workflow);
+  const createdWorkflow = workflowRepository.create(workflow);
+  saveVersion(createdWorkflow);
 
-  return snapshot(workflow);
+  return snapshot(createdWorkflow);
 };
 
-// Update workflow content and create a new version.
+// Update workflow details and create a new version.
 const updateWorkflow = async (id, updates, user) => {
   const scope = getScope(user);
-  const workflow = workflows.get(id);
+  const workflow = workflowRepository.findById(id);
 
   if (
     !workflow ||
@@ -198,16 +189,20 @@ const updateWorkflow = async (id, updates, user) => {
   workflow.currentVersion += 1;
   workflow.updatedAt = new Date().toISOString();
 
-  workflows.set(id, workflow);
-  saveVersion(workflow);
+  const savedWorkflow = workflowRepository.save(workflow);
 
-  return snapshot(workflow);
+  if (!savedWorkflow) {
+    return null;
+  }
+
+  saveVersion(savedWorkflow);
+  return snapshot(savedWorkflow);
 };
 
-// Soft-delete a workflow so it is no longer listed or accessible normally.
+// Archive a workflow without permanently deleting its data.
 const deleteWorkflow = async (id, user) => {
   const scope = getScope(user);
-  const workflow = workflows.get(id);
+  const workflow = workflowRepository.findById(id);
 
   if (
     !workflow ||
@@ -221,9 +216,7 @@ const deleteWorkflow = async (id, user) => {
   workflow.status = "Inactive";
   workflow.updatedAt = new Date().toISOString();
 
-  workflows.set(id, workflow);
-
-  return true;
+  return Boolean(workflowRepository.save(workflow));
 };
 
 // Retrieve version history, newest version first.
@@ -234,7 +227,8 @@ const getWorkflowVersions = async (id, user) => {
     return null;
   }
 
-  return [...(workflowVersions.get(id)?.values() || [])]
+  return workflowRepository
+    .findVersions(id)
     .sort((a, b) => b.currentVersion - a.currentVersion)
     .map(clone);
 };
@@ -249,23 +243,17 @@ const getWorkflowVersion = async (id, version, user) => {
 
   const requestedVersion = Number(version);
 
-  if (
-    !Number.isInteger(requestedVersion) ||
-    requestedVersion < 1
-  ) {
+  if (!Number.isInteger(requestedVersion) || requestedVersion < 1) {
     return null;
   }
 
-  const savedVersion = workflowVersions.get(id)?.get(requestedVersion);
-
-  return savedVersion ? clone(savedVersion) : null;
+  return workflowRepository.findVersion(id, requestedVersion);
 };
 
-// Mark a saved version as deployed.
-// Actual workflow execution must be handled by the M4 execution engine.
+// Mark a saved version as deployed. This does not execute the workflow.
 const deployWorkflow = async (id, version, user) => {
   const scope = getScope(user);
-  const workflow = workflows.get(id);
+  const workflow = workflowRepository.findById(id);
 
   if (
     !workflow ||
@@ -280,19 +268,17 @@ const deployWorkflow = async (id, version, user) => {
       ? workflow.currentVersion
       : Number(version);
 
-  if (
-    !Number.isInteger(selectedVersion) ||
-    selectedVersion < 1
-  ) {
+  if (!Number.isInteger(selectedVersion) || selectedVersion < 1) {
     const error = new Error("Invalid workflow version.");
     error.status = 400;
     error.code = "INVALID_VERSION";
     throw error;
   }
 
-  const savedVersion = workflowVersions
-    .get(id)
-    ?.get(selectedVersion);
+  const savedVersion = workflowRepository.findVersion(
+    id,
+    selectedVersion
+  );
 
   if (!savedVersion) {
     const error = new Error("Workflow version not found.");
@@ -306,13 +292,17 @@ const deployWorkflow = async (id, version, user) => {
   workflow.deployedAt = new Date().toISOString();
   workflow.updatedAt = workflow.deployedAt;
 
-  workflows.set(id, workflow);
+  const savedWorkflow = workflowRepository.save(workflow);
+
+  if (!savedWorkflow) {
+    return null;
+  }
 
   return {
-    workflowId: workflow.id,
-    deployedVersion: workflow.deployedVersion,
+    workflowId: savedWorkflow.id,
+    deployedVersion: savedWorkflow.deployedVersion,
     status: "deployed",
-    deployedAt: workflow.deployedAt,
+    deployedAt: savedWorkflow.deployedAt,
   };
 };
 
