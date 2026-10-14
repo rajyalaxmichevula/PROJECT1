@@ -121,22 +121,22 @@ const ExecutionFlow = () => {
                 <div className="flex items-center gap-1">
                     <button
                         onClick={() => setActiveTab('flow')}
-                        className={`border-b-2 px-5 py-3 text-sm font-medium ${
-                            activeTab === 'flow'
+                        className={`border-b-2 px-5 py-3 text-sm font-medium 
+                            ${activeTab === 'flow'
                                 ? 'border-blue-600 text-blue-600'
                                 : 'border-transparent text-slate-500'
-                        }`}
+                            }`}
                     >
                         Flow View
                     </button>
 
                     <button
                         onClick={() => setActiveTab('timeline')}
-                        className={`border-b-2 px-5 py-3 text-sm font-medium ${
-                            activeTab === 'timeline'
+                        className={`border-b-2 px-5 py-3 text-sm font-medium 
+                            ${activeTab === 'timeline'
                                 ? 'border-blue-600 text-blue-600'
                                 : 'border-transparent text-slate-500'
-                        }`}
+                            }`}
                     >
                         Execution Timeline
                     </button>
