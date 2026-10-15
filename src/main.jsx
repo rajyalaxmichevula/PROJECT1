@@ -6,11 +6,14 @@ import { RouterProvider } from "react-router-dom";
 import "./index.css";
 import { store } from "./store/store";
 import appRouter from "./components/layout/appRouter";
+import { AppProvider } from "./Context/AppContext";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
-      <RouterProvider router={appRouter} />
+      <AppProvider>
+        <RouterProvider router={appRouter} />
+      </AppProvider>
     </Provider>
   </StrictMode>,
 );

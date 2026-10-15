@@ -1,12 +1,26 @@
-import { Search, ChevronDown } from 'lucide-react'
-import React, { useState } from 'react'
+import {
+    Search,
+    ChevronDown,
+} from 'lucide-react'
+
+import React from 'react'
+import TemplatesBox from './TemplatesBox'
+import { useAppContext } from '../../Context/AppContext'
 
 const TemplatesLibrary = () => {
-    const [activeTab, setActiveTab] = useState('allTemplates')
-    const [search, setSearch] = useState('')
-    const [category, setCategory] = useState('all')
-    const [tenant, setTenant] = useState('all')
-    const [sortBy, setSortBy] = useState('popularity')
+    const {
+        activeTab,
+        setActiveTab,
+        search,
+        setSearch,
+        category,
+        setCategory,
+        tenant,
+        setTenant,
+        sortBy,
+        setSortBy,
+        filteredTemplates,
+    } = useAppContext()
 
     const tabs = [
         { label: 'All Templates', value: 'allTemplates' },
@@ -26,10 +40,10 @@ const TemplatesLibrary = () => {
                         type="button"
                         onClick={() => setActiveTab(tab.value)}
                         className={`whitespace-nowrap border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
-                            activeTab === tab.value
-                                ? 'border-blue-600 text-blue-600'
-                                : 'border-transparent text-slate-500 hover:text-slate-700'
-                        }`}
+    activeTab === tab.value
+        ? 'border-blue-600 text-blue-600'
+        : 'border-transparent text-slate-500 hover:text-slate-700'
+} `}
                     >
                         {tab.label}
                     </button>
@@ -41,7 +55,10 @@ const TemplatesLibrary = () => {
 
                 {/* Search */}
                 <div className="flex min-w-0 items-center gap-2 rounded-md border border-slate-300 px-3 py-1.5 xl:w-56 xl:shrink-0">
-                    <Search size={16} className="shrink-0 text-slate-500" />
+                    <Search
+                        size={16}
+                        className="shrink-0 text-slate-500"
+                    />
 
                     <input
                         type="text"
@@ -55,6 +72,7 @@ const TemplatesLibrary = () => {
                 {/* Dropdown Filters */}
                 <div className="grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-2 xl:flex xl:flex-1">
 
+                    {/* Category */}
                     <div className="relative min-w-0">
                         <select
                             value={category}
@@ -62,10 +80,14 @@ const TemplatesLibrary = () => {
                             className="w-full appearance-none rounded-md border border-slate-300 bg-white px-3 py-2 pr-8 text-sm text-slate-800 outline-none focus:border-blue-500"
                         >
                             <option value="all">All Categories</option>
-                            <option value="automation">Automation</option>
-                            <option value="integration">Integration</option>
-                            <option value="data-processing">Data Processing</option>
-                            <option value="notifications">Notifications</option>
+                            <option value="E-commerce">E-commerce</option>
+                            <option value="User Management">User Management</option>
+                            <option value="Inventory">Inventory</option>
+                            <option value="Payment">Payment</option>
+                            <option value="Data Pipeline">Data Pipeline</option>
+                            <option value="Notifications">Notifications</option>
+                            <option value="Approval">Approval</option>
+                            <option value="Monitoring">Monitoring</option>
                         </select>
 
                         <ChevronDown
@@ -74,6 +96,7 @@ const TemplatesLibrary = () => {
                         />
                     </div>
 
+                    {/* Tenant */}
                     <div className="relative min-w-0">
                         <select
                             value={tenant}
@@ -81,8 +104,8 @@ const TemplatesLibrary = () => {
                             className="w-full appearance-none rounded-md border border-slate-300 bg-white px-3 py-2 pr-8 text-sm text-slate-800 outline-none focus:border-blue-500"
                         >
                             <option value="all">All Tenants</option>
-                            <option value="acme">Acme Corp</option>
-                            <option value="internal">Internal</option>
+                            <option value="Multi-tenant">Multi-tenant</option>
+                            <option value="All Tenants">All Tenants Access</option>
                         </select>
 
                         <ChevronDown
@@ -91,6 +114,7 @@ const TemplatesLibrary = () => {
                         />
                     </div>
 
+                    {/* Sorting */}
                     <div className="relative min-w-0">
                         <select
                             value={sortBy}
@@ -110,6 +134,9 @@ const TemplatesLibrary = () => {
 
                 </div>
             </div>
+
+            {/* Filtered Templates */}
+            <TemplatesBox templatesData={filteredTemplates} />
 
         </div>
     )

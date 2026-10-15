@@ -11,8 +11,7 @@ const ExecutionNode = ({ node, colors }) => {
 
     return (
         <div
-            className={`flex h-17.5 w-58 items-center gap-3 rounded-xl px-3.5 ${theme.shadow} ${theme.card} ${theme.border}`}
-        >
+            className={`flex h-17.5 w-58 items-center gap-3 rounded-xl px-3.5 ${theme.shadow} ${theme.card} ${theme.border}`}>
             {/* Icon */}
             <div
                 className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${theme.glow} ${theme.text}`}
