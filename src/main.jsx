@@ -7,12 +7,15 @@ import "./index.css";
 import { store } from "./store/store";
 import appRouter from "./components/layout/appRouter";
 import { AppProvider } from "./Context/AppContext";
+import { WorkflowProvider } from "./Context/TemplateWorkFlow";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
       <AppProvider>
-        <RouterProvider router={appRouter} />
+        <WorkflowProvider>
+          <RouterProvider router={appRouter} />
+        </WorkflowProvider>
       </AppProvider>
     </Provider>
   </StrictMode>,

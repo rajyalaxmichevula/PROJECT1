@@ -45,7 +45,7 @@ const TemplatesBox = ({ templatesData }) => {
                                 {template.tags?.map((tag, index) => (
                                     <span
                                         key={tag}
-                                        className={`rounded-md px-1.5 py-1 text-xs ${index % 3 === 0
+                                        className={`rounded-md px-1.5 py-1 text-[11px] ${index % 3 === 0
                                                 ? 'bg-blue-100 text-blue-700'
                                                 : index % 3 === 1
                                                     ? 'bg-purple-100 text-purple-700'
