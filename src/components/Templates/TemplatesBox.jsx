@@ -3,7 +3,7 @@ import { Download, Eye, EllipsisVertical } from 'lucide-react'
 
 const TemplatesBox = ({ templatesData }) => {
     return (
-        <div className="mt-4 grid grid-cols-1 gap-3 rounded-md border border-slate-200 px-0.5 py-2 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-4 grid grid-cols-1 gap-3 rounded-md px-0.5 py-2 sm:grid-cols-2 xl:grid-cols-3">
 
             {templatesData.length > 0 ? (
                 templatesData.map((template) => {

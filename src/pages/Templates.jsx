@@ -8,7 +8,7 @@ const Templates = () => {
 
       <TemplatesPageHeader />
 
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+      <div className="grid grid-cols-1 gap-2 xl:grid-cols-[0.9fr_0.8fr]">
 
         <TemplatesLibrary/>
 

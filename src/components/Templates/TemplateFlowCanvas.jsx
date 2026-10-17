@@ -41,13 +41,13 @@ const nodeStyles = {
 };
 
 const positions = {
-    trigger: { left: 235, top: 20 },
-    "validate-order": { left: 225, top: 120 },
-    "check-inventory": { left: 224, top: 220 },
-    "process-payment": { left: 45, top: 345 },
-    "update-inventory": { left: 45, top: 445 },
-    "send-notification": { left: 350, top: 345 },
-    "end-failed": { left: 360, top: 445 },
+    "trigger": { left: 230, top: 20 },
+    "validate-order": { left: 210, top: 120 },
+    "check-inventory": { left: 210, top: 220 },
+    "process-payment": { left: 40, top: 345 },
+    "update-inventory": { left: 40, top: 445 },
+    "send-notification": { left: 320, top: 345 },
+    "end-failed": { left: 350, top: 445 },
 };
 
 const TemplateFlowCanvas = () => {
@@ -87,11 +87,11 @@ const TemplateFlowCanvas = () => {
                 </div>
 
                 <div className=" ">
-                    <h3 className="text-[12px] font-semibold leading-5 text-slate-800">
+                    <h3 className="text-[13px] font-semibold leading-5 text-slate-800 text-nowrap">
                         {node.title}
                     </h3>
 
-                    <p className="text-[12px] leading-5 text-slate-600">
+                    <p className="text-[11px] leading-5 text-nowrap text-slate-600">
                         {node.subtitle}
                     </p>
                 </div>
@@ -110,9 +110,9 @@ const TemplateFlowCanvas = () => {
     );
 
     return (
-        <div className="w-full min-w-0 overflow-hidden rounded-xl bg-slate-50">
-            <div className="mx-auto w-155 px-2 py-3">
-                <div className="relative h-132.5 w-155 overflow-hidden rounded-lg border-2 border-slate-200 bg-slate-200/30">
+        <div className=" rounded-xl bg-slate-50">
+            <div className="mx-auto px-2 py-3">
+                <div className="relative h-132.5 overflow-hidden rounded-lg border-2 border-slate-200 bg-slate-200/30">
 
                     {/* Connector Lines */}
                     <svg
@@ -140,7 +140,7 @@ const TemplateFlowCanvas = () => {
 
                         {/* Trigger -> Validate */}
                         <path
-                            d="M310 85 V115"
+                            d="M300 85 V115"
                             stroke="#0f172a"
                             strokeWidth="1.7"
                             markerEnd="url(#workflowArrow)"
@@ -148,7 +148,7 @@ const TemplateFlowCanvas = () => {
 
                         {/* Validate -> Inventory */}
                         <path
-                            d="M310 185 V215"
+                            d="M300 185 V215"
                             stroke="#0f172a"
                             strokeWidth="1.7"
                             markerEnd="url(#workflowArrow)"
@@ -156,7 +156,7 @@ const TemplateFlowCanvas = () => {
 
                         {/* Inventory -> In Stock */}
                         <path
-                            d="M310 285 V310 H150 V340"
+                            d="M300 285 V310 H150 V340"
                             stroke="#0f172a"
                             strokeWidth="1.7"
                             strokeLinejoin="round"
@@ -165,7 +165,7 @@ const TemplateFlowCanvas = () => {
 
                         {/* Inventory -> Out of Stock */}
                         <path
-                            d="M310 285 V310 H440 V340"
+                            d="M300 285 V310 H440 V340"
                             stroke="#0f172a"
                             strokeWidth="1.7"
                             strokeLinejoin="round"
@@ -191,13 +191,13 @@ const TemplateFlowCanvas = () => {
 
                     {/* Branch Labels */}
                     {inStock && (
-                        <span className="absolute left-30.5 top-75 z-20 rounded-full bg-emerald-100 px-4 py-1 text-xs font-medium text-emerald-800">
+                        <span className="absolute left-30.5 top-75 z-20 rounded-full bg-emerald-100 px-4 py-1 text-[12px] font-medium text-emerald-800">
                             {inStock.label}
                         </span>
                     )}
 
                     {outOfStock && (
-                        <span className="absolute left-103.5 top-75 z-20 rounded-full bg-red-100 px-4 py-1 text-xs font-medium text-red-700">
+                        <span className="absolute left-98.5 top-75 z-20 text-nowrap rounded-full bg-red-100 px-4 py-1 text-[11px] font-medium text-red-700">
                             {outOfStock.label}
                         </span>
                     )}
