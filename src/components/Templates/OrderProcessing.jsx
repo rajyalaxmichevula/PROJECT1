@@ -5,7 +5,7 @@ import TemplatesDescription from './TemplatesDescription'
 
 const OrderProcessing = () => {
     return (
-        <div className=' py-2 px-3 rounded-lg shadow-md'>
+        <div className=' py-2 px-3 rounded-lg border border-slate-200 shadow-md'>
 
             {/* Template Information */}
             <div className=' flex justify-between my-3'>

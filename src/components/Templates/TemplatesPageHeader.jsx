@@ -1,6 +1,10 @@
 import { Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const TemplatesPageHeader = () => {
+
+    const navigate = useNavigate()
+
     return (
         <div className="flex items-center justify-between">
             <div>
@@ -16,6 +20,7 @@ const TemplatesPageHeader = () => {
             <button
                 type="button"
                 className="flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-blue-700"
+                onClick={() => navigate('/templates/create')}
             >
                 <Plus size={18} />
                 <span>Create Templates</span>

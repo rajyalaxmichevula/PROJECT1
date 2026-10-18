@@ -11,6 +11,7 @@ import Workers from "../../pages/Workers";
 import Monitoring from "../../pages/Monitoring";
 import Alerts from "../../pages/Alerts";
 import Settings from "../../pages/Settings";
+import CreateTemplate from "../Templates/CreateTemplate";
 
 const appRouter = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const appRouter = createBrowserRouter([
       {
         path: "templates",
         element: <Templates />,
+      },
+      {
+        path: '/templates/create',
+        element: <CreateTemplate />,
       },
       {
         path: "tenants",
