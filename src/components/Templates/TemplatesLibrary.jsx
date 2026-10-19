@@ -77,7 +77,7 @@ const TemplatesLibrary = () => {
                         <select
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
-                            className="w-full appearance-none rounded-md border border-slate-300 bg-white px-3 py-2 pr-8 text-sm text-slate-800 outline-none focus:border-blue-500"
+                            className="w-full appearance-none rounded-md border border-slate-300 bg-white px-3 py-2 pr-8 text-[13px] text-slate-800 outline-none focus:border-blue-500"
                         >
                             <option value="all">All Categories</option>
                             <option value="E-commerce">E-commerce</option>
@@ -101,7 +101,7 @@ const TemplatesLibrary = () => {
                         <select
                             value={tenant}
                             onChange={(e) => setTenant(e.target.value)}
-                            className="w-full appearance-none rounded-md border border-slate-300 bg-white px-3 py-2 pr-8 text-sm text-slate-800 outline-none focus:border-blue-500"
+                            className="w-full appearance-none rounded-md border border-slate-300 bg-white px-3 py-2 pr-8 text-[13px] text-slate-800 outline-none focus:border-blue-500"
                         >
                             <option value="all">All Tenants</option>
                             <option value="Multi-tenant">Multi-tenant</option>
@@ -119,7 +119,7 @@ const TemplatesLibrary = () => {
                         <select
                             value={sortBy}
                             onChange={(e) => setSortBy(e.target.value)}
-                            className="w-full appearance-none rounded-md border border-slate-300 bg-white px-3 py-2 pr-8 text-sm text-slate-800 outline-none focus:border-blue-500"
+                            className="w-full appearance-none rounded-md border border-slate-300 bg-white px-3 py-2 pr-8 text-[13px] text-slate-800 outline-none focus:border-blue-500"
                         >
                             <option value="popularity">Sort by: Popularity</option>
                             <option value="newest">Sort by: Newest</option>

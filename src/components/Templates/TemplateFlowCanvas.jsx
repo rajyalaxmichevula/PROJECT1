@@ -41,11 +41,11 @@ const nodeStyles = {
 };
 
 const positions = {
-    "trigger": { left: 230, top: 20 },
-    "validate-order": { left: 210, top: 120 },
-    "check-inventory": { left: 210, top: 220 },
-    "process-payment": { left: 40, top: 345 },
-    "update-inventory": { left: 40, top: 445 },
+    "trigger": { left: 210, top: 20 },
+    "validate-order": { left: 195, top: 120 },
+    "check-inventory": { left: 190, top: 220 },
+    "process-payment": { left: 20, top: 345 },
+    "update-inventory": { left: 20, top: 445 },
     "send-notification": { left: 320, top: 345 },
     "end-failed": { left: 350, top: 445 },
 };
@@ -140,7 +140,7 @@ const TemplateFlowCanvas = () => {
 
                         {/* Trigger -> Validate */}
                         <path
-                            d="M300 85 V115"
+                            d="M280 85 V115"
                             stroke="#0f172a"
                             strokeWidth="1.7"
                             markerEnd="url(#workflowArrow)"
@@ -148,7 +148,7 @@ const TemplateFlowCanvas = () => {
 
                         {/* Validate -> Inventory */}
                         <path
-                            d="M300 185 V215"
+                            d="M280 185 V215"
                             stroke="#0f172a"
                             strokeWidth="1.7"
                             markerEnd="url(#workflowArrow)"
@@ -156,7 +156,7 @@ const TemplateFlowCanvas = () => {
 
                         {/* Inventory -> In Stock */}
                         <path
-                            d="M300 285 V310 H150 V340"
+                            d="M280 285 V310 H120 V340"
                             stroke="#0f172a"
                             strokeWidth="1.7"
                             strokeLinejoin="round"
@@ -165,7 +165,7 @@ const TemplateFlowCanvas = () => {
 
                         {/* Inventory -> Out of Stock */}
                         <path
-                            d="M300 285 V310 H440 V340"
+                            d="M280 285 V310 H440 V340"
                             stroke="#0f172a"
                             strokeWidth="1.7"
                             strokeLinejoin="round"
@@ -174,7 +174,7 @@ const TemplateFlowCanvas = () => {
 
                         {/* Payment -> Update Inventory */}
                         <path
-                            d="M150 410 V440"
+                            d="M120 410 V440"
                             stroke="#0f172a"
                             strokeWidth="1.7"
                             markerEnd="url(#workflowArrow)"
@@ -191,7 +191,7 @@ const TemplateFlowCanvas = () => {
 
                     {/* Branch Labels */}
                     {inStock && (
-                        <span className="absolute left-30.5 top-75 z-20 rounded-full bg-emerald-100 px-4 py-1 text-[12px] font-medium text-emerald-800">
+                        <span className="absolute left-20.5 top-75 z-20 rounded-full bg-emerald-100 px-4 py-1 text-[12px] font-medium text-emerald-800">
                             {inStock.label}
                         </span>
                     )}
