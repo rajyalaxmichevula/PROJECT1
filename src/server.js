@@ -8,7 +8,7 @@ const workflowRoutes = require("./routes/workflowRoutes");
 const executionRoutes = require("./routes/executionRoutes");
 const tenantRoutes = require("./routes/tenantRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
-
+const settingsRoutes = require("./routes/settingsRoutes");
 const app = express();
 
 app.use(express.json());
@@ -19,7 +19,7 @@ app.use("/api/workflows", workflowRoutes);
 app.use("/api/executions", executionRoutes);
 app.use("/api/tenants", tenantRoutes);
 app.use("/api/notifications", notificationRoutes);
-
+app.use("/api/settings", settingsRoutes);
 app.get("/api/health", (req, res) => {
   res.json({
     status: "OK",
