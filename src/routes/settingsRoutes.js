@@ -18,7 +18,7 @@ router.get("/general", (req, res) => {
 });
 
 router.put("/general", (req, res) => {
-    const { fullName, email, timezone, language } = req.body;
+    const { fullName, email, timezone, language } = req.body || {};
 
     if (
         typeof fullName !== "string" || !fullName.trim() ||
