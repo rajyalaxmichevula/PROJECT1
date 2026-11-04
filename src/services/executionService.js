@@ -1,3 +1,4 @@
+
 const { randomUUID } = require("node:crypto");
 const repository = require("../repositories/executionRepository");
 
@@ -233,7 +234,7 @@ const findAuthorizedExecution = (id, user) => {
 
 const redactSecrets = (value) => {
   const sensitiveKey =
-    /password|secret|token|credential|authorization|api[-_]?key/i;
+    /password|secret|token|credential|authorization|api[-_]?key|access[-_]?key|private[-_]?key/i;
 
   if (Array.isArray(value)) {
     return value.map(redactSecrets);
@@ -356,11 +357,16 @@ const getContext = (id, user) => {
   });
 };
 
+
 const retry = (id, user, body = {}) => {
   const execution = findAuthorizedExecution(id, user);
 
   if (body.mode !== "current_step") {
-    throw createHttpError(400, "INVALID_RETRY_MODE", 'Mode must be "current_step".');
+    throw createHttpError(
+      400,
+      "INVALID_RETRY_MODE",
+      'Mode must be "current_step".'
+    );
   }
 
   if (!["running", "failed"].includes(execution.status)) {
@@ -371,12 +377,38 @@ const retry = (id, user, body = {}) => {
     );
   }
 
+  const currentStepId = execution.currentStep?.nodeId || null;
+
+  // Check whether a retry for this step is already accepted.
+  const existingRetry = execution.operations.find(
+    (operation) =>
+      operation.type === "retry" &&
+      operation.status === "accepted" &&
+      operation.stepId === currentStepId
+  );
+
+  if (existingRetry) {
+    return {
+      success: true,
+      message: "Retry already accepted",
+      data: {
+        executionId: execution.id,
+        status: execution.status,
+        retryMode: body.mode,
+        currentStepId,
+        operationId: existingRetry.id,
+      },
+    };
+  }
+
   const operationId = `op_retry_${randomUUID()}`;
 
   execution.retryCount += 1;
+
   execution.operations.push({
     id: operationId,
     type: "retry",
+    stepId: currentStepId,
     status: "accepted",
     createdAt: new Date().toISOString(),
   });
@@ -390,7 +422,7 @@ const retry = (id, user, body = {}) => {
       executionId: execution.id,
       status: execution.status,
       retryMode: body.mode,
-      currentStepId: execution.currentStep?.nodeId || null,
+      currentStepId,
       operationId,
     },
   };
