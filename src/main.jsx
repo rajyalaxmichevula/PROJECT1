@@ -8,13 +8,16 @@ import { store } from "./store/store";
 import appRouter from "./components/layout/appRouter";
 import { AppProvider } from "./Context/AppContext";
 import { WorkflowProvider } from "./Context/TemplateWorkFlow";
+import { AlertProvider } from "./Context/AlertContext";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
       <AppProvider>
         <WorkflowProvider>
-          <RouterProvider router={appRouter} />
+          <AlertProvider>
+            <RouterProvider router={appRouter} />
+          </AlertProvider>
         </WorkflowProvider>
       </AppProvider>
     </Provider>

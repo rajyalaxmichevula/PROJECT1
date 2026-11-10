@@ -37,21 +37,15 @@ const FilterAlert = () => {
             <div className="grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-2 xl:flex xl:flex-1">
 
                 {/* Category */}
-                <div className="relative min-w-0">
+                <div className="relative w-35">
                     <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
                         className="w-full appearance-none rounded-md border border-slate-300 bg-white px-3 py-2 pr-8 text-[13px] text-slate-800 outline-none focus:border-blue-500"
                     >
                         <option value="all">All Status</option>
-                        <option value="E-commerce">E-commerce</option>
-                        <option value="User Management">User Management</option>
-                        <option value="Inventory">Inventory</option>
-                        <option value="Payment">Payment</option>
-                        <option value="Data Pipeline">Data Pipeline</option>
-                        <option value="Notifications">Notifications</option>
-                        <option value="Approval">Approval</option>
-                        <option value="Monitoring">Monitoring</option>
+                        <option value="Active">Active</option>
+                        <option value="Resolved">Resolved</option>
                     </select>
 
                     <ChevronDown
@@ -61,15 +55,17 @@ const FilterAlert = () => {
                 </div>
 
                 {/* Tenant */}
-                <div className="relative min-w-0">
+                <div className="relative w-35">
                     <select
                         value={tenant}
                         onChange={(e) => setTenant(e.target.value)}
                         className="w-full appearance-none rounded-md border border-slate-300 bg-white px-3 py-2 pr-8 text-[13px] text-slate-800 outline-none focus:border-blue-500"
                     >
                         <option value="all">All Severity</option>
-                        <option value="Multi-tenant">Multi-tenant</option>
-                        <option value="All Tenants">All Tenants Access</option>
+                        <option value="Critical">Critical</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
                     </select>
 
                     <ChevronDown
@@ -79,15 +75,17 @@ const FilterAlert = () => {
                 </div>
 
                 {/* Sorting */}
-                <div className="relative min-w-0">
+                <div className="relative w-50">
                     <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value)}
                         className="w-full appearance-none rounded-md border border-slate-300 bg-white px-3 py-2 pr-8 text-[13px] text-slate-800 outline-none focus:border-blue-500"
                     >
                         <option value="popularity">All Category</option>
-                        <option value="newest">Sort by: Newest</option>
-                        <option value="name">Sort by: Name</option>
+                        <option value="Application">Application</option>
+                        <option value="Business">Business</option>
+                        <option value="Infrastructure">Infrastructure</option>
+                        <option value="Performance">Performance</option>
                     </select>
 
                     <ChevronDown
