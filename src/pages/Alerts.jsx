@@ -1,6 +1,7 @@
 import AlertDetails from "../components/Alert/AlertDetails";
 import AlertPageHeader from "../components/Alert/AlertPageHeader";
 import AlertsStats from "../components/Alert/AlertsStats";
+import AlertTable from "../components/Alert/AlertTable";
 import FilterAlert from "../components/Alert/FilterAlert";
 
 const Alerts = () => {
@@ -18,10 +19,10 @@ const Alerts = () => {
           <FilterAlert />
         </div>
 
-        <div className="grid grid-cols-1 gap-2 xl:grid-cols-[0.9fr_0.8fr]">
+        <div className="grid grid-cols-1 gap-2 xl:grid-cols-[1.2fr_0.8fr] mt-2">
+          <AlertTable />
 
-          
-          <AlertDetails/>
+          <AlertDetails />
         </div>
 
       </div>
