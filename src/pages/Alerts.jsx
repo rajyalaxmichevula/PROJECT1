@@ -1,3 +1,4 @@
+import AlertAnalytics from "../components/Alert/AlertAnalytics";
 import AlertDetails from "../components/Alert/AlertDetails";
 import AlertPageHeader from "../components/Alert/AlertPageHeader";
 import AlertsStats from "../components/Alert/AlertsStats";
@@ -14,7 +15,6 @@ const Alerts = () => {
 
       <div className=" shadow-lg p-2 rounded-lg">
 
-
         <div>
           <FilterAlert />
         </div>
@@ -24,6 +24,16 @@ const Alerts = () => {
 
           <AlertDetails />
         </div>
+
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] mt-2">
+
+        <div>
+          <AlertAnalytics />
+
+        </div>
+
 
       </div>
 
